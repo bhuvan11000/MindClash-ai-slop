@@ -1,14 +1,21 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import CharacterCard from '../components/CharacterCard'
+import Plasma from '../components/Plasma'
 import characters from '../data/characters.json'
 
 function HomePage() {
   return (
     <div className="relative min-h-screen bg-[#08080c]">
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 rounded-full bg-[hsla(260,70%,40%,0.12)] blur-[120px] animate-blob-1" />
-        <div className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 rounded-full bg-[hsla(200,70%,35%,0.08)] blur-[120px] animate-blob-2" />
+      <div className="fixed inset-0 -z-10">
+        <Plasma
+          color="#2d1b69"
+          speed={0.8}
+          direction="forward"
+          scale={1.5}
+          opacity={0.6}
+          mouseInteractive={false}
+        />
       </div>
 
       <Header />
