@@ -7,18 +7,19 @@ import characters from '../data/characters.json'
 function HomePage() {
   return (
     <div className="relative min-h-screen bg-[#08080c]">
-      <div className="fixed inset-0 -z-10">
+      <div className="fixed inset-0 z-0">
         <Plasma
           color="#2d1b69"
           speed={0.8}
           direction="forward"
           scale={1.5}
-          opacity={0.6}
+          opacity={0.5}
           mouseInteractive={false}
         />
       </div>
 
-      <Header />
+      <div className="relative z-10">
+        <Header />
 
       <main className="max-w-[1200px] mx-auto px-6">
         <section className="pt-20 pb-12 text-center">
@@ -60,6 +61,7 @@ function HomePage() {
       <footer className="text-center text-[#606070] text-[13px] pb-12">
         Built for fun. Powered by Gemini. No managers were harmed.
       </footer>
+      </div>
     </div>
   )
 }
