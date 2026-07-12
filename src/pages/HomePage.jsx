@@ -53,7 +53,7 @@ function HomePage() {
         <section className="text-center py-12">
           <Link
             to="/chat"
-            className="inline-block bg-gradient-to-r from-amber-500 to-amber-700 text-white px-10 py-4 rounded-full text-lg font-medium hover:scale-105 transition-all duration-300"
+            className="inline-block bg-white text-[#08080c] px-10 py-4 rounded-full text-lg font-semibold hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] transition-all duration-300"
           >
             Start Chatting →
           </Link>

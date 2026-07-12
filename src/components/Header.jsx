@@ -9,7 +9,7 @@ function Header({ fullWidth }) {
         </Link>
         <Link
           to="/chat"
-          className="bg-gradient-to-r from-amber-500 to-amber-700 text-white px-6 py-2 rounded-full text-sm font-medium hover:scale-105 transition-all duration-300"
+          className="bg-white text-[#08080c] px-6 py-2 rounded-full text-sm font-semibold hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] transition-all duration-300"
         >
           Start Chatting
         </Link>
