@@ -63,3 +63,12 @@
 .animate-card-enter {
   animation: card-enter 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+
+@keyframes bounce-dot {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-4px); }
+}
+
+.animate-bounce-dot {
+  animation: bounce-dot 1.2s ease-in-out infinite;
+}
