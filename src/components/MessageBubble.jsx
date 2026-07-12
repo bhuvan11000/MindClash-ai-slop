@@ -13,7 +13,7 @@ function MessageBubble({ message, character, isNew, showAvatar = true }) {
         ) : (
           <div
             className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-            style={{ background: character.theme.accentColor }}
+            style={{ background: character.theme.cardColor }}
           >
             <span className="text-white text-[11px] font-bold">{character.avatarInitials}</span>
           </div>

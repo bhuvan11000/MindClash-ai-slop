@@ -9,6 +9,7 @@
     "theme": {
       "gradientColors": ["#c9a84c", "#8b7d3c", "#5c6b2f", "#a08a4a"],
       "cardGradient": "linear-gradient(135deg, #c9a84c 0%, #8b7d3c 40%, #5c6b2f 100%)",
+      "cardColor": "#5a5a3a",
       "accentColor": "#c9a84c",
       "accentColorMuted": "rgba(201, 168, 76, 0.15)",
       "ambientGlow": "radial-gradient(ellipse at 70% 15%, rgba(201, 168, 76, 0.2) 0%, transparent 70%)"
@@ -25,6 +26,7 @@
     "theme": {
       "gradientColors": ["#9b2d5e", "#6b1d4a", "#c9884c", "#3d1030"],
       "cardGradient": "linear-gradient(135deg, #9b2d5e 0%, #6b1d4a 40%, #c9884c 100%)",
+      "cardColor": "#5a2a3a",
       "accentColor": "#c44d7b",
       "accentColorMuted": "rgba(196, 77, 123, 0.15)",
       "ambientGlow": "radial-gradient(ellipse at 70% 15%, rgba(196, 77, 123, 0.2) 0%, transparent 70%)"
@@ -41,6 +43,7 @@
     "theme": {
       "gradientColors": ["#e03e2d", "#c42d1e", "#f07030", "#8b1a0e"],
       "cardGradient": "linear-gradient(135deg, #e03e2d 0%, #c42d1e 40%, #f07030 100%)",
+      "cardColor": "#5a2a1a",
       "accentColor": "#e05540",
       "accentColorMuted": "rgba(224, 85, 64, 0.15)",
       "ambientGlow": "radial-gradient(ellipse at 70% 15%, rgba(224, 85, 64, 0.2) 0%, transparent 70%)"
@@ -57,6 +60,7 @@
     "theme": {
       "gradientColors": ["#0ea5e9", "#0369a1", "#7c3aed", "#0c4a6e"],
       "cardGradient": "linear-gradient(135deg, #0ea5e9 0%, #0369a1 40%, #7c3aed 100%)",
+      "cardColor": "#1a3a4a",
       "accentColor": "#38bdf8",
       "accentColorMuted": "rgba(56, 189, 248, 0.15)",
       "ambientGlow": "radial-gradient(ellipse at 70% 15%, rgba(56, 189, 248, 0.2) 0%, transparent 70%)"
@@ -73,6 +77,7 @@
     "theme": {
       "gradientColors": ["#f59e0b", "#ec4899", "#8b5cf6", "#06b6d4"],
       "cardGradient": "linear-gradient(135deg, #f59e0b 0%, #ec4899 50%, #8b5cf6 100%)",
+      "cardColor": "#5a4a1a",
       "accentColor": "#f59e0b",
       "accentColorMuted": "rgba(245, 158, 11, 0.15)",
       "ambientGlow": "radial-gradient(ellipse at 70% 15%, rgba(245, 158, 11, 0.2) 0%, transparent 70%)"
@@ -89,6 +94,7 @@
     "theme": {
       "gradientColors": ["#7f1d1d", "#450a0a", "#991b1b", "#1c0505"],
       "cardGradient": "linear-gradient(135deg, #7f1d1d 0%, #450a0a 50%, #991b1b 100%)",
+      "cardColor": "#3a1a1a",
       "accentColor": "#b91c1c",
       "accentColorMuted": "rgba(185, 28, 28, 0.15)",
       "ambientGlow": "radial-gradient(ellipse at 70% 15%, rgba(185, 28, 28, 0.2) 0%, transparent 70%)"
@@ -105,6 +111,7 @@
     "theme": {
       "gradientColors": ["#1e3a5f", "#991b1b", "#c9a84c", "#0f2440"],
       "cardGradient": "linear-gradient(135deg, #1e3a5f 0%, #991b1b 50%, #c9a84c 100%)",
+      "cardColor": "#5a452a",
       "accentColor": "#c9a84c",
       "accentColorMuted": "rgba(201, 168, 76, 0.15)",
       "ambientGlow": "radial-gradient(ellipse at 70% 15%, rgba(201, 168, 76, 0.2) 0%, transparent 70%)"
@@ -121,6 +128,7 @@
     "theme": {
       "gradientColors": ["#ea580c", "#0d9488", "#f97316", "#065f46"],
       "cardGradient": "linear-gradient(135deg, #ea580c 0%, #f97316 40%, #0d9488 100%)",
+      "cardColor": "#5a3a1a",
       "accentColor": "#f97316",
       "accentColorMuted": "rgba(249, 115, 22, 0.15)",
       "ambientGlow": "radial-gradient(ellipse at 70% 15%, rgba(249, 115, 22, 0.2) 0%, transparent 70%)"
@@ -137,6 +145,7 @@
     "theme": {
       "gradientColors": ["#dc2626", "#ea580c", "#2563eb", "#f59e0b"],
       "cardGradient": "linear-gradient(135deg, #dc2626 0%, #ea580c 40%, #2563eb 100%)",
+      "cardColor": "#4a1a1a",
       "accentColor": "#ef4444",
       "accentColorMuted": "rgba(239, 68, 68, 0.15)",
       "ambientGlow": "radial-gradient(ellipse at 70% 15%, rgba(239, 68, 68, 0.2) 0%, transparent 70%)"
@@ -153,6 +162,7 @@
     "theme": {
       "gradientColors": ["#ec4899", "#db2777", "#d946ef", "#f0abfc"],
       "cardGradient": "linear-gradient(135deg, #ec4899 0%, #db2777 40%, #d946ef 100%)",
+      "cardColor": "#5a2a4a",
       "accentColor": "#f472b6",
       "accentColorMuted": "rgba(244, 114, 182, 0.15)",
       "ambientGlow": "radial-gradient(ellipse at 70% 15%, rgba(244, 114, 182, 0.2) 0%, transparent 70%)"
