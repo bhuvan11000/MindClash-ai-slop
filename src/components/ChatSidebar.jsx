@@ -30,7 +30,7 @@ function ChatSidebar({ characters, selectedId, onSelect }) {
                   className="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center"
                   style={{
                     background: character.theme.cardGradient,
-                    ...(isSelected ? { boxShadow: `0 0 0 2px ${character.theme.accentColor}`, outline: '2px solid #0f0f14', outlineOffset: 0 } : {}),
+                    ...(isSelected ? { boxShadow: `0 0 0 2px #0f0f14, 0 0 0 4px ${character.theme.accentColor}` } : {}),
                   }}
                 >
                   <span className="text-white text-[13px] font-bold">{character.avatarInitials}</span>
