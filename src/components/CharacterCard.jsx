@@ -5,7 +5,7 @@ function CharacterCard({ character }) {
 
   return (
     <div
-      className="relative h-[200px] rounded-[20px] overflow-hidden cursor-pointer group transition-all duration-300 hover:-translate-y-1"
+      className="relative h-[170px] rounded-[20px] overflow-hidden cursor-pointer group transition-all duration-300 hover:-translate-y-1"
       style={{ boxShadow: 'none' }}
       onMouseEnter={(e) => {
         e.currentTarget.style.boxShadow = `0 8px 40px ${character.theme.accentColor}4D`

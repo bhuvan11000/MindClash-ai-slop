@@ -1,23 +1,11 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import CharacterCard from '../components/CharacterCard'
-import Plasma from '../components/Plasma'
 import characters from '../data/characters.json'
 
 function HomePage() {
   return (
     <div className="relative min-h-screen bg-[#08080c]">
-      <div className="fixed inset-0 z-0">
-        <Plasma
-          color="#2d1b69"
-          speed={1.0}
-          direction="forward"
-          scale={1.2}
-          opacity={0.75}
-          mouseInteractive={false}
-        />
-      </div>
-
       <div className="relative z-10">
         <Header />
 
