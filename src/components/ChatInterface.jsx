@@ -147,13 +147,13 @@ function ChatInterface({ character }) {
       <div className="h-[72px] flex-shrink-0 bg-[#0f0f14] shadow-sm flex items-center px-6 gap-3 z-10">
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ background: character.theme.cardGradient }}
-        >
-          <span className="text-white text-sm font-bold">{character.avatarInitials}</span>
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <p className="font-heading font-semibold text-base text-white">{character.name}</p>
+            style={{ background: character.theme.accentColor }}
+          >
+            <span className="text-white text-sm font-bold">{character.avatarInitials}</span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <p className="font-heading font-semibold text-base text-white">{character.name}</p>
             <span
               className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full"
               style={{
@@ -180,7 +180,7 @@ function ChatInterface({ character }) {
           <div className="flex-1 flex flex-col items-center justify-center">
             <div
               className="w-20 h-20 rounded-2xl flex items-center justify-center"
-              style={{ background: character.theme.cardGradient }}
+              style={{ background: character.theme.accentColor }}
             >
               <span className="text-white text-2xl font-bold">{character.avatarInitials}</span>
             </div>
@@ -231,7 +231,7 @@ function ChatInterface({ character }) {
               <div className="self-start inline-flex bg-[#141418]/60 rounded-xl px-4 py-2 items-center gap-2.5 mt-2">
                 <div
                   className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-                  style={{ background: character.theme.cardGradient }}
+                  style={{ background: character.theme.accentColor }}
                 >
                   <span className="text-white text-[11px] font-bold">{character.avatarInitials}</span>
                 </div>
