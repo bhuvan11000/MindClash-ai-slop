@@ -1,9 +1,9 @@
-function MessageBubble({ message, character }) {
+function MessageBubble({ message, character, isNew }) {
   const isUser = message.role === 'user'
 
   return (
     <div
-      className={`flex gap-2.5 max-w-[70%] animate-message-in ${isUser ? 'flex-row-reverse self-end' : 'flex-row self-start'}`}
+      className={`flex gap-2.5 max-w-[70%] ${isNew ? 'animate-message-in' : ''} ${isUser ? 'flex-row-reverse self-end' : 'flex-row self-start'}`}
     >
       {isUser ? (
         <div className="w-7 h-7 rounded-lg bg-white/[0.08] border border-white/[0.06] flex items-center justify-center flex-shrink-0">

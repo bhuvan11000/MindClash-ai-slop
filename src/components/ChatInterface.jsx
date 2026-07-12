@@ -20,8 +20,7 @@ function ChatInterface({ character }) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const messagesEndRef = useRef(null)
-  const prevGradientRef = useRef(null)
-  const [oldGradient, setOldGradient] = useState(null)
+  const sessionStartRef = useRef(null)
 
   const currentMessages = character ? messages[character.id] || [] : []
 
@@ -30,16 +29,10 @@ function ChatInterface({ character }) {
   }, [currentMessages, isLoading])
 
   useEffect(() => {
-    if (!character) return
-    const currentGradient = character.theme.gradientCSS
-    if (prevGradientRef.current && prevGradientRef.current !== currentGradient) {
-      setOldGradient(prevGradientRef.current)
-      const t = setTimeout(() => setOldGradient(null), 500)
-      prevGradientRef.current = currentGradient
-      return () => clearTimeout(t)
+    if (character) {
+      sessionStartRef.current = messages[character.id]?.length || 0
     }
-    prevGradientRef.current = currentGradient
-  }, [character])
+  }, [character?.id])
 
   const sendMessage = async (retryMessages) => {
     if (!character) return
@@ -129,17 +122,7 @@ function ChatInterface({ character }) {
   }
 
   return (
-    <div className="flex-1 h-full flex flex-col relative overflow-hidden">
-      {oldGradient && (
-        <div
-          className="absolute inset-0 transition-opacity duration-500"
-          style={{ background: oldGradient, opacity: oldGradient ? 1 : 0 }}
-        />
-      )}
-      <div
-        className="absolute inset-0 transition-opacity duration-500"
-        style={{ background: character.theme.gradientCSS }}
-      />
+    <div className="flex-1 h-full flex flex-col relative overflow-hidden bg-[#0a0a10]">
       <div className="relative z-10 flex flex-col h-full">
         <div className="h-16 flex-shrink-0 bg-black/40 backdrop-blur-xl border-b border-white/[0.06] flex items-center px-5 gap-3">
           <div
@@ -160,7 +143,13 @@ function ChatInterface({ character }) {
           <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse-dot" />
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-3">
+        <div
+          className="flex-1 overflow-y-auto p-6 flex flex-col gap-3 relative noise-overlay"
+          style={{
+            background: `${character.theme.ambientGlow}, #0a0a10`,
+            transition: 'background 600ms ease',
+          }}
+        >
           {currentMessages.length === 0 && !error ? (
             <div className="flex-1 flex flex-col items-center justify-center">
               <div
@@ -179,7 +168,12 @@ function ChatInterface({ character }) {
           ) : (
             <>
               {currentMessages.map((msg, i) => (
-                <MessageBubble key={i} message={msg} character={character} />
+                <MessageBubble
+                  key={i}
+                  message={msg}
+                  character={character}
+                  isNew={i >= (sessionStartRef.current || 0)}
+                />
               ))}
               {error && (
                 <div className="self-center max-w-md w-full bg-red-500/10 border border-red-500/20 rounded-2xl px-4 py-3 text-center">

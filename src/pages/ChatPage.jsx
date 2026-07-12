@@ -13,7 +13,7 @@ function ChatPage() {
 
   return (
     <div className="min-h-screen bg-[#08080c] flex flex-col">
-      <Header />
+      <Header fullWidth />
       <div className="flex h-[calc(100vh-64px)]">
         <ChatSidebar
           characters={characters}
