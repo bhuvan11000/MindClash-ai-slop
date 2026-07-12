@@ -6,8 +6,8 @@ function Header({ fullWidth }) {
       <div className="w-full mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2.5">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-5 h-5">
-            <line x1="5" y1="5" x2="27" y2="27" stroke="white" stroke-width="4" stroke-linecap="round"/>
-            <line x1="27" y1="5" x2="5" y2="27" stroke="white" stroke-width="4" stroke-linecap="round"/>
+            <line x1="5" y1="5" x2="27" y2="27" stroke="white" stroke-width="6" stroke-linecap="round"/>
+            <line x1="27" y1="5" x2="5" y2="27" stroke="white" stroke-width="6" stroke-linecap="round"/>
           </svg>
           <span className="font-heading font-bold text-lg text-white">MindClash</span>
         </Link>
