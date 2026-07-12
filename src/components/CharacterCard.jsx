@@ -52,9 +52,10 @@ function CharacterCard({ character }) {
           className="relative flex-1 w-full rounded-[20px] overflow-hidden cursor-pointer"
           onClick={() => navigate(`/chat?character=${character.id}`)}
         >
+          <div className="absolute inset-0 bg-[#0f0f14]" />
           <div
             className="absolute inset-0"
-            style={{ background: character.theme.cardGradient }}
+            style={{ background: character.theme.ambientGlow }}
           />
           <div
             className="absolute inset-0"
