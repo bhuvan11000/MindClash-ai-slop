@@ -10,7 +10,7 @@ function HomePage() {
       <div className="fixed inset-0 z-0">
         <LightRays
           raysOrigin="top-center"
-          raysColor="#a855f7"
+          raysColor="#c9953f"
           raysSpeed={1.0}
           lightSpread={0.9}
           rayLength={2.0}
@@ -25,7 +25,7 @@ function HomePage() {
 
       <main className="max-w-[1200px] mx-auto px-6">
         <section className="pt-20 pb-12 text-center">
-          <div className="inline-flex items-center px-4 py-1.5 rounded-full border border-purple-400/20 bg-purple-400/10 text-[12px] uppercase tracking-wider text-purple-400 mb-8">
+          <div className="inline-flex items-center px-4 py-1.5 rounded-full border border-amber-400/20 bg-amber-400/10 text-[12px] uppercase tracking-wider text-amber-400 mb-8">
             Powered by Gemini
           </div>
 
@@ -53,7 +53,7 @@ function HomePage() {
         <section className="text-center py-12">
           <Link
             to="/chat"
-            className="inline-block bg-gradient-to-r from-purple-500 to-purple-700 text-white px-10 py-4 rounded-full text-lg font-medium hover:scale-105 transition-all duration-300"
+            className="inline-block bg-gradient-to-r from-amber-500 to-amber-700 text-white px-10 py-4 rounded-full text-lg font-medium hover:scale-105 transition-all duration-300"
           >
             Start Chatting →
           </Link>
