@@ -36,16 +36,16 @@ function CharacterCard({ character }) {
     >
       <BorderGlow
         className="h-full"
-        edgeSensitivity={20}
+        edgeSensitivity={25}
         glowColor={hexToHSL(character.theme.accentColor)}
         backgroundColor="transparent"
         borderRadius={20}
-        glowRadius={30}
-        glowIntensity={1.2}
-        coneSpread={20}
+        glowRadius={45}
+        glowIntensity={2.0}
+        coneSpread={30}
         animated={false}
         colors={character.theme.gradientColors}
-        fillOpacity={0.3}
+        fillOpacity={0.45}
         style={{ gridTemplateRows: '1fr' }}
       >
         <div
