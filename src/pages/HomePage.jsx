@@ -25,7 +25,7 @@ function HomePage() {
 
       <main className="max-w-[1200px] mx-auto px-6">
         <section className="pt-20 pb-12 text-center">
-          <div className="inline-flex items-center px-4 py-1.5 rounded-full border border-amber-400/20 bg-amber-400/10 text-[12px] uppercase tracking-wider text-amber-400 mb-8">
+          <div className="inline-flex items-center px-5 py-2 rounded-full border border-white/15 bg-white/[0.04] backdrop-blur-sm text-[11px] uppercase tracking-[0.12em] text-white/60 mb-8">
             Powered by Gemini
           </div>
 
