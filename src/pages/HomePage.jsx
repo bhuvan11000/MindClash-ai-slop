@@ -10,7 +10,7 @@ function HomePage() {
       <div className="fixed inset-0 z-0">
         <LightRays
           raysOrigin="top-center"
-          raysColor="#c9953f"
+          raysColor="#ffffff"
           raysSpeed={1.0}
           lightSpread={0.9}
           rayLength={2.0}
