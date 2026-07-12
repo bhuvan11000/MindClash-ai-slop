@@ -10,14 +10,14 @@ function HomePage() {
       <div className="fixed inset-0 z-0">
         <LightRays
           raysOrigin="top-center"
-          raysColor="#7c3aed"
-          raysSpeed={0.8}
-          lightSpread={0.6}
-          rayLength={1.5}
+          raysColor="#a855f7"
+          raysSpeed={1.0}
+          lightSpread={0.9}
+          rayLength={2.0}
           followMouse={true}
-          mouseInfluence={0.15}
-          noiseAmount={0.05}
-          distortion={0.02}
+          mouseInfluence={0.25}
+          noiseAmount={0.08}
+          distortion={0.04}
         />
       </div>
       <div className="relative z-10">
@@ -38,7 +38,7 @@ function HomePage() {
           </p>
         </section>
 
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8 pt-6">
+        <section className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-10 gap-y-8 pt-6">
           {characters.map((character, i) => (
             <div
               key={character.id}
