@@ -1,11 +1,25 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import CharacterCard from '../components/CharacterCard'
+import LightRays from '../components/LightRays'
 import characters from '../data/characters.json'
 
 function HomePage() {
   return (
     <div className="relative min-h-screen bg-[#08080c]">
+      <div className="fixed inset-0 z-0">
+        <LightRays
+          raysOrigin="top-center"
+          raysColor="#7c3aed"
+          raysSpeed={0.8}
+          lightSpread={0.6}
+          rayLength={1.5}
+          followMouse={true}
+          mouseInfluence={0.15}
+          noiseAmount={0.05}
+          distortion={0.02}
+        />
+      </div>
       <div className="relative z-10">
         <Header />
 
