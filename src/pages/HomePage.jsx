@@ -10,10 +10,10 @@ function HomePage() {
       <div className="fixed inset-0 z-0">
         <Plasma
           color="#2d1b69"
-          speed={0.8}
+          speed={1.0}
           direction="forward"
-          scale={1.5}
-          opacity={0.5}
+          scale={1.2}
+          opacity={0.75}
           mouseInteractive={false}
         />
       </div>
@@ -27,7 +27,7 @@ function HomePage() {
             Powered by Gemini
           </div>
 
-          <h1 className="font-heading font-extrabold text-6xl text-white bg-gradient-to-r from-white via-white/80 to-white/40 bg-clip-text text-transparent">
+          <h1 className="font-heading font-extrabold text-6xl animate-shimmer">
             MindClash
           </h1>
 
@@ -36,7 +36,7 @@ function HomePage() {
           </p>
         </section>
 
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-6">
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8 pt-6">
           {characters.map((character, i) => (
             <div
               key={character.id}

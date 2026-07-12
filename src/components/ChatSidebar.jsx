@@ -6,7 +6,7 @@ function ChatSidebar({ characters, selectedId, onSelect }) {
         return (
           <div
             key={character.id}
-            className={`h-16 px-4 flex items-center gap-3 cursor-pointer transition-[background] duration-200 ${
+            className={`h-16 px-4 flex items-center gap-3 cursor-pointer transition-all duration-200 ${
               isSelected
                 ? 'border-l-3'
                 : 'hover:bg-white/[0.04]'
