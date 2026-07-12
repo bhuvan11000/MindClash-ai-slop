@@ -4,8 +4,12 @@ function Header({ fullWidth }) {
   return (
     <header className="sticky top-0 z-50 h-16 bg-black/20 backdrop-blur-xl border-b border-[rgba(255,255,255,0.06)] flex items-center px-6">
       <div className={`w-full mx-auto flex items-center justify-between ${fullWidth ? '' : 'max-w-[1200px]'}`}>
-        <Link to="/" className="font-heading font-bold text-xl text-white">
-          MindClash
+        <Link to="/" className="flex items-center gap-2.5">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-6 h-6">
+            <line x1="5" y1="5" x2="27" y2="27" stroke="white" stroke-width="4" stroke-linecap="round"/>
+            <line x1="27" y1="5" x2="5" y2="27" stroke="white" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+          <span className="font-heading font-bold text-xl text-white">MindClash</span>
         </Link>
         <Link
           to="/chat"
