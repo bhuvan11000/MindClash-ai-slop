@@ -35,6 +35,7 @@ function CharacterCard({ character }) {
       showTooltip={false}
     >
       <BorderGlow
+        className="h-full"
         edgeSensitivity={20}
         glowColor={hexToHSL(character.theme.accentColor)}
         backgroundColor="transparent"
@@ -45,9 +46,10 @@ function CharacterCard({ character }) {
         animated={false}
         colors={character.theme.gradientColors}
         fillOpacity={0.3}
+        style={{ gridTemplateRows: '1fr' }}
       >
         <div
-          className="relative h-full w-full rounded-[20px] overflow-hidden cursor-pointer"
+          className="relative flex-1 w-full rounded-[20px] overflow-hidden cursor-pointer"
           onClick={() => navigate(`/chat?character=${character.id}`)}
         >
           <div

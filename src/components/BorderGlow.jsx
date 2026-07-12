@@ -61,6 +61,7 @@ const BorderGlow = ({
   animated = false,
   colors = ['#c084fc', '#f472b6', '#38bdf8'],
   fillOpacity = 0.5,
+  style = {},
 }) => {
   const cardRef = useRef(null);
 
@@ -141,8 +142,9 @@ const BorderGlow = ({
         '--glow-padding': `${glowRadius}px`,
         '--cone-spread': coneSpread,
         '--fill-opacity': fillOpacity,
-        ...glowVars,
         ...buildGradientVars(colors),
+        ...glowVars,
+        ...style,
       }}
     >
       <span className="edge-light" />
