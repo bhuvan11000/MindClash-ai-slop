@@ -30,7 +30,7 @@ function CharacterCard({ character }) {
       imageHeight="210px"
       imageWidth="100%"
       scaleOnHover={1.02}
-      rotateAmplitude={8}
+      rotateAmplitude={14}
       showMobileWarning={false}
       showTooltip={false}
     >

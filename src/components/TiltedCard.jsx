@@ -3,9 +3,9 @@ import { motion, useMotionValue, useSpring } from 'motion/react';
 import './TiltedCard.css';
 
 const springValues = {
-  damping: 30,
-  stiffness: 100,
-  mass: 2
+  damping: 15,
+  stiffness: 250,
+  mass: 0.8
 };
 
 export default function TiltedCard({
