@@ -38,7 +38,7 @@ function HomePage() {
           </p>
         </section>
 
-        <section className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-10 gap-y-8 pt-6">
+        <section className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-6 pt-6">
           {characters.map((character, i) => (
             <div
               key={character.id}

@@ -14,7 +14,7 @@ function ChatPage() {
   return (
     <div className="min-h-screen bg-[#08080c] flex flex-col">
       <Header fullWidth />
-      <div className="flex h-[calc(100vh-64px)]">
+      <div className="flex h-[calc(100vh-64px)] p-3 gap-3">
         <ChatSidebar
           characters={characters}
           selectedId={selectedCharacterId}

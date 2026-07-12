@@ -14,6 +14,19 @@ const TYPING_TEXTS = {
   karen: "Karen is asking for the manager...",
 }
 
+const CONVERSATION_STARTERS = {
+  socrates: ["What is the meaning of justice?", "Question my beliefs", "Teach me wisdom"],
+  shakespeare: ["Write me a sonnet", "What inspired Hamlet?", "Insult me poetically"],
+  ramsay: ["Rate my cooking skills", "What's the worst dish ever?", "Teach me a recipe"],
+  elon: ["How do we get to Mars?", "What's the future of AI?", "Roast my startup idea"],
+  intern: ["Tell me about your first day", "What's your LinkedIn strategy?", "How's the coffee here?"],
+  butcher: ["What do you think of superheroes?", "Tell me about Homelander", "Got any life advice?"],
+  trump: ["Make my life great again", "What's your best deal?", "Rate my business idea"],
+  bangalore: ["How's the traffic today?", "Best filter coffee spot?", "Tell me about IT life"],
+  luffy: ["Who's the strongest pirate?", "Tell me about your crew", "What's your favorite food?"],
+  karen: ["I have a complaint", "Can I see the manager?", "Rate this customer service"],
+}
+
 function ChatInterface({ character }) {
   const [messages, setMessages] = useState({})
   const [inputValue, setInputValue] = useState('')
@@ -21,6 +34,7 @@ function ChatInterface({ character }) {
   const [error, setError] = useState(null)
   const messagesEndRef = useRef(null)
   const sessionStartRef = useRef(null)
+  const inputWrapperRef = useRef(null)
 
   const currentMessages = character ? messages[character.id] || [] : []
 
@@ -73,10 +87,12 @@ function ChatInterface({ character }) {
     }
   }
 
-  const handleSubmit = () => {
-    if (!character || !inputValue.trim() || isLoading) return
+  const handleSubmit = (starter) => {
+    if (!character || isLoading) return
+    const text = starter || inputValue.trim()
+    if (!text) return
 
-    const userMessage = { role: 'user', content: inputValue.trim() }
+    const userMessage = { role: 'user', content: text }
     const updatedMessages = [...currentMessages, userMessage]
 
     setMessages((prev) => ({
@@ -95,25 +111,30 @@ function ChatInterface({ character }) {
     }
   }
 
-  const handleInputFocus = (e) => {
-    const wrapper = e.currentTarget.parentElement
-    if (wrapper) {
-      wrapper.style.borderColor = character.theme.accentColor
-      wrapper.style.boxShadow = `0 0 0 3px ${character.theme.accentColorMuted}`
-    }
+  const handleInputFocus = () => {
+    const el = inputWrapperRef.current
+    if (!el) return
+    el.style.boxShadow = `0 0 0 2px ${character.theme.accentColor}4d, 0 4px 20px ${character.theme.accentColor}1a`
   }
 
-  const handleInputBlur = (e) => {
-    const wrapper = e.currentTarget.parentElement
-    if (wrapper) {
-      wrapper.style.borderColor = 'rgba(255,255,255,0.08)'
-      wrapper.style.boxShadow = 'none'
-    }
+  const handleInputBlur = () => {
+    const el = inputWrapperRef.current
+    if (!el) return
+    el.style.boxShadow = 'none'
   }
+
+  const starters = character ? CONVERSATION_STARTERS[character.id] || [] : []
+
+  const groupedMessages = currentMessages.reduce((acc, msg, i) => {
+    const prevRole = i > 0 ? currentMessages[i - 1].role : null
+    const isGrouped = msg.role === prevRole
+    acc.push({ ...msg, showAvatar: !isGrouped, isGrouped })
+    return acc
+  }, [])
 
   if (!character) {
     return (
-      <div className="flex-1 h-full flex flex-col bg-[#08080c]">
+      <div className="flex-1 h-full flex flex-col rounded-2xl overflow-hidden shadow-lg shadow-black/20 bg-[#0a0a10]">
         <div className="flex-1 flex items-center justify-center">
           <p className="text-[#606070] text-sm">Select a character to start chatting</p>
         </div>
@@ -122,121 +143,146 @@ function ChatInterface({ character }) {
   }
 
   return (
-    <div className="flex-1 h-full flex flex-col relative overflow-hidden bg-[#0a0a10]">
-      <div className="relative z-10 flex flex-col h-full">
-        <div className="h-16 flex-shrink-0 bg-black/40 backdrop-blur-xl border-b border-white/[0.06] flex items-center px-5 gap-3">
-          <div
-            className="w-9 h-9 rounded-[10px] flex items-center justify-center flex-shrink-0"
-            style={{ background: character.theme.cardGradient }}
-          >
-            <span className="text-white text-sm font-bold">{character.avatarInitials}</span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="font-heading font-semibold text-base text-white">{character.name}</p>
-            <p
-              className="text-[11px] uppercase tracking-wider"
-              style={{ color: character.theme.accentColor }}
-            >
-              {character.category} · {character.subcategory}
-            </p>
-          </div>
-          <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse-dot" />
-        </div>
-
+    <div className="flex-1 h-full flex flex-col rounded-2xl overflow-hidden shadow-lg shadow-black/20 bg-[#0a0a10]">
+      <div className="h-[72px] flex-shrink-0 bg-[#0f0f14] shadow-sm flex items-center px-6 gap-3 z-10">
         <div
-          className="flex-1 overflow-y-auto p-6 flex flex-col gap-3 relative noise-overlay"
-          style={{
-            background: `${character.theme.ambientGlow}, #0a0a10`,
-            transition: 'background 600ms ease',
-          }}
+          className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+          style={{ background: character.theme.cardGradient }}
         >
-          {currentMessages.length === 0 && !error ? (
-            <div className="flex-1 flex flex-col items-center justify-center">
-              <div
-                className="w-20 h-20 rounded-2xl flex items-center justify-center"
-                style={{ background: character.theme.cardGradient }}
-              >
-                <span className="text-white text-2xl font-bold">{character.avatarInitials}</span>
-              </div>
-              <p className="text-[#a0a0b0] text-base mt-4">
-                Start a conversation with {character.name}
-              </p>
-              <p className="text-[#606070] text-[13px] mt-1">
-                Say hello, ask a question, or just vibe.
-              </p>
+          <span className="text-white text-sm font-bold">{character.avatarInitials}</span>
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <p className="font-heading font-semibold text-base text-white">{character.name}</p>
+            <span
+              className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full"
+              style={{
+                background: character.theme.accentColorMuted,
+                color: character.theme.accentColor,
+              }}
+            >
+              {character.category}
+            </span>
+          </div>
+          <p className="text-xs text-[#606070] truncate">{character.tagline}</p>
+        </div>
+        <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse-dot" />
+      </div>
+
+      <div
+        className="flex-1 overflow-y-auto p-8 flex flex-col relative noise-overlay"
+        style={{
+          background: `${character.theme.ambientGlow}, #0a0a10`,
+          transition: 'background 600ms ease',
+        }}
+      >
+        {currentMessages.length === 0 && !error ? (
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <div
+              className="w-20 h-20 rounded-2xl flex items-center justify-center"
+              style={{ background: character.theme.cardGradient }}
+            >
+              <span className="text-white text-2xl font-bold">{character.avatarInitials}</span>
             </div>
-          ) : (
-            <>
-              {currentMessages.map((msg, i) => (
+            <p className="text-[#a0a0b0] text-base mt-4">
+              Start a conversation with {character.name}
+            </p>
+            <p className="text-[#606070] text-[13px] mt-1">
+              Say hello, ask a question, or just vibe.
+            </p>
+            {starters.length > 0 && (
+              <div className="flex flex-wrap justify-center gap-2 mt-6">
+                {starters.map((starter) => (
+                  <button
+                    key={starter}
+                    onClick={() => handleSubmit(starter)}
+                    className="px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.06] text-sm text-[#a0a0b0] hover:bg-white/[0.08] hover:text-white transition-all cursor-pointer"
+                  >
+                    {starter}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="flex flex-col">
+            {groupedMessages.map((msg, i) => (
+              <div key={i} style={i > 0 ? { marginTop: msg.isGrouped ? '4px' : '16px' } : undefined}>
                 <MessageBubble
-                  key={i}
                   message={msg}
                   character={character}
                   isNew={i >= (sessionStartRef.current || 0)}
+                  showAvatar={msg.showAvatar}
                 />
-              ))}
-              {error && (
-                <div className="self-center max-w-md w-full bg-red-500/10 border border-red-500/20 rounded-2xl px-4 py-3 text-center">
-                  <p className="text-red-400 text-sm">Something went wrong. Please try again.</p>
-                  <button
-                    onClick={() => sendMessage()}
-                    className="text-red-400 underline text-xs cursor-pointer mt-1 hover:text-red-300 transition-colors"
-                  >
-                    Retry
-                  </button>
+              </div>
+            ))}
+            {error && (
+              <div className="self-center max-w-md w-full bg-red-500/10 border border-red-500/20 rounded-2xl px-4 py-3 text-center mt-4">
+                <p className="text-red-400 text-sm">Something went wrong. Please try again.</p>
+                <button
+                  onClick={() => sendMessage()}
+                  className="text-red-400 underline text-xs cursor-pointer mt-1 hover:text-red-300 transition-colors"
+                >
+                  Retry
+                </button>
+              </div>
+            )}
+            {isLoading && (
+              <div className="self-start inline-flex bg-[#141418]/60 rounded-xl px-4 py-2 items-center gap-2.5 mt-2">
+                <div
+                  className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+                  style={{ background: character.theme.cardGradient }}
+                >
+                  <span className="text-white text-[11px] font-bold">{character.avatarInitials}</span>
                 </div>
-              )}
-              {isLoading && (
-                <div className="flex gap-2.5 items-center">
-                  <div
-                    className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-                    style={{ background: character.theme.cardGradient }}
-                  >
-                    <span className="text-white text-[11px] font-bold">{character.avatarInitials}</span>
-                  </div>
-                  <p className="italic text-[13px] text-[#606070]">
-                    {TYPING_TEXTS[character.id] || `${character.name} is typing...`}
-                  </p>
-                  <span className="flex gap-[3px] items-center">
-                    <span className="w-1 h-1 rounded-full bg-[#606070] animate-bounce-dot" style={{ animationDelay: '0s' }} />
-                    <span className="w-1 h-1 rounded-full bg-[#606070] animate-bounce-dot" style={{ animationDelay: '0.15s' }} />
-                    <span className="w-1 h-1 rounded-full bg-[#606070] animate-bounce-dot" style={{ animationDelay: '0.3s' }} />
-                  </span>
-                </div>
-              )}
-            </>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-
-        <div className="flex-shrink-0 bg-black/50 backdrop-blur-xl border-t border-white/[0.06] p-3 px-4">
-          <div className="flex items-center gap-3 bg-white/[0.06] border border-white/[0.08] rounded-full pl-5 pr-2 py-2 transition-all duration-200">
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyDown}
-              onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
-              placeholder={`Message ${character.name}...`}
-              className="flex-1 bg-transparent border-none outline-none text-[#f0f0f2] text-sm placeholder-[#606070]"
-              disabled={isLoading}
-            />
-            <button
-              onClick={handleSubmit}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = `0 0 12px ${character.theme.accentColor}66`
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = 'none'
-              }}
-              disabled={isLoading || !inputValue.trim()}
-              className="w-9 h-9 rounded-full flex items-center justify-center text-white text-lg flex-shrink-0 hover:scale-105 transition-all duration-150 disabled:opacity-50 disabled:hover:scale-100"
-              style={{ background: character.theme.accentColor }}
-            >
-              ↑
-            </button>
+                <p className="italic text-[13px] text-[#606070]">
+                  {TYPING_TEXTS[character.id] || `${character.name} is typing...`}
+                </p>
+                <span className="flex gap-[3px] items-center">
+                  <span className="w-1 h-1 rounded-full bg-[#606070] animate-bounce-dot" style={{ animationDelay: '0s' }} />
+                  <span className="w-1 h-1 rounded-full bg-[#606070] animate-bounce-dot" style={{ animationDelay: '0.15s' }} />
+                  <span className="w-1 h-1 rounded-full bg-[#606070] animate-bounce-dot" style={{ animationDelay: '0.3s' }} />
+                </span>
+              </div>
+            )}
           </div>
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+
+      <div className="flex-shrink-0 bg-[#0e0e14] shadow-[0_-2px_10px_rgba(0,0,0,0.2)] p-4 px-6">
+        <div
+          ref={inputWrapperRef}
+          className="flex items-center gap-3 bg-white/[0.06] border border-white/[0.08] rounded-2xl pl-3 pr-2 py-3 transition-all duration-200"
+        >
+          <div className="w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center flex-shrink-0 text-[#606070] text-lg leading-none">
+            +
+          </div>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            placeholder={`Message ${character.name}...`}
+            className="flex-1 bg-transparent border-none outline-none text-[#f0f0f2] text-sm placeholder-[#606070]"
+            disabled={isLoading}
+          />
+          <button
+            onClick={() => handleSubmit()}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = `0 0 12px ${character.theme.accentColor}66`
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = 'none'
+            }}
+            disabled={isLoading || !inputValue.trim()}
+            className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-lg flex-shrink-0 transition-all duration-150 disabled:opacity-30 disabled:hover:scale-100 enabled:hover:scale-105"
+            style={{ background: character.theme.accentColor }}
+          >
+            ↑
+          </button>
         </div>
       </div>
     </div>
