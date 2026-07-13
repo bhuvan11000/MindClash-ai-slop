@@ -144,29 +144,31 @@ function ChatInterface({ character }) {
 
   return (
     <div className="flex-1 h-full flex flex-col rounded-2xl overflow-hidden shadow-lg shadow-black/20 bg-[#0a0a10]">
-      <div className="h-[72px] flex-shrink-0 bg-[#0f0f14] shadow-sm flex items-center px-6 gap-3 z-10">
-        <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+      <div className="flex-shrink-0 bg-[#0f0f14] shadow-sm z-10">
+        <div className="flex items-center px-6 py-5 gap-4">
+          <div
+            className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg"
             style={{ background: character.theme.cardColor }}
           >
-            <span className="text-white text-sm font-bold">{character.avatarInitials}</span>
+            <span className="text-white text-lg font-bold">{character.avatarInitials}</span>
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <p className="font-heading font-semibold text-base text-white">{character.name}</p>
-            <span
-              className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full"
-              style={{
-                background: character.theme.accentColorMuted,
-                color: character.theme.accentColor,
-              }}
-            >
-              {character.category}
-            </span>
+            <div className="flex items-center gap-2.5">
+              <p className="font-heading font-semibold text-lg text-white">{character.name}</p>
+              <span
+                className="text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full"
+                style={{
+                  background: character.theme.accentColorMuted,
+                  color: character.theme.accentColor,
+                }}
+              >
+                {character.category}
+              </span>
+              <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse-dot" />
+            </div>
+            <p className="text-[13px] text-[#707080] mt-0.5 truncate">{character.tagline}</p>
           </div>
-          <p className="text-xs text-[#606070] truncate">{character.tagline}</p>
         </div>
-        <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse-dot" />
       </div>
 
       <div
@@ -179,16 +181,13 @@ function ChatInterface({ character }) {
         {currentMessages.length === 0 && !error ? (
           <div className="flex-1 flex flex-col items-center justify-center">
             <div
-              className="w-20 h-20 rounded-2xl flex items-center justify-center"
+              className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg"
               style={{ background: character.theme.cardColor }}
             >
               <span className="text-white text-2xl font-bold">{character.avatarInitials}</span>
             </div>
-            <p className="text-[#a0a0b0] text-base mt-4">
-              Start a conversation with {character.name}
-            </p>
-            <p className="text-[#606070] text-[13px] mt-1">
-              Say hello, ask a question, or just vibe.
+            <p className="text-[#808090] text-[15px] mt-5 italic max-w-sm text-center">
+              "{character.tagline}"
             </p>
             {starters.length > 0 && (
               <div className="flex flex-wrap justify-center gap-2 mt-6">
@@ -253,11 +252,8 @@ function ChatInterface({ character }) {
       <div className="flex-shrink-0 bg-[#0e0e14] shadow-[0_-2px_10px_rgba(0,0,0,0.2)] p-4 px-6">
         <div
           ref={inputWrapperRef}
-          className="flex items-center gap-3 bg-white/[0.06] border border-white/[0.08] rounded-2xl pl-3 pr-2 py-3 transition-all duration-200"
+          className="flex items-center gap-3 bg-white/[0.06] border border-white/[0.08] rounded-2xl pl-5 pr-2 py-3 transition-all duration-200"
         >
-          <div className="w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center flex-shrink-0 text-[#606070] text-lg leading-none">
-            +
-          </div>
           <input
             type="text"
             value={inputValue}

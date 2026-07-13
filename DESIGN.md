@@ -1,290 +1,290 @@
-# MindClash — Design Update Guide
+# MindClash — Design Update v2
 
-This document describes design changes to apply to the existing MindClash codebase. The app already works — these are visual and structural improvements. Read this entire document before making any changes.
-
----
-
-## Table of Contents
-
-1. [Bug Fixes (Do These First)](#1-bug-fixes-do-these-first)
-2. [Character Theme Rework](#2-character-theme-rework)
-3. [Chat Page Structure Overhaul](#3-chat-page-structure-overhaul)
-4. [Home Page Grid Fix](#4-home-page-grid-fix)
-5. [Summary of Files to Modify](#5-summary-of-files-to-modify)
+These are precise code changes to apply to the existing codebase. Follow each change exactly as described. Do NOT add anything extra, do NOT rearrange code that isn't mentioned, and do NOT touch files that aren't listed.
 
 ---
 
-## 1. Bug Fixes (Do These First)
+## Change 1: Clean up the Home Page (src/pages/HomePage.jsx)
 
-These are small issues to fix before any design work.
+### 1A. Remove the "Powered by Gemini" badge
 
-### 1A. Dead "About" link
-
-In `src/components/Header.jsx`, the "About" link points to `/about` but no such route exists in `App.jsx`. **Remove** the About link entirely from the header. Keep only the "MindClash" logo on the left and "Start Chatting" button on the right.
-
-### 1B. Message re-animation bug
-
-In `src/components/MessageBubble.jsx`, the class `animate-message-in` is applied to every message unconditionally. This means when you switch away from a character and switch back, ALL old messages replay their slide-in animation.
-
-**Fix:** Only animate the most recently added message. One approach:
-- Add an `isNew` prop to MessageBubble
-- Only apply the `animate-message-in` class when `isNew` is true
-- In ChatInterface.jsx, track which message index was just added and pass `isNew={true}` only for that message (or the last message in the array after a send/receive)
-
-### 1C. Chat page header misalignment
-
-In `src/components/Header.jsx`, the inner div has `max-w-[1200px]`. This is correct for the home page but wrong for the chat page where the sidebar+chat fill the full viewport width. 
-
-**Fix:** On the chat page, the header should span the full width without the max-width constraint. Either:
-- Remove `max-w-[1200px]` from Header and let each page control its own content width, OR
-- Accept a `fullWidth` prop in Header and conditionally remove the max-width
-
-### 1D. Cleanup
-
-Delete the file `deno.lock` from the project root. It's not needed for a Vite/Node project.
-
----
-
-## 2. Character Theme Rework
-
-### The Problem
-
-The current multi-stop `radial-gradient` backgrounds (`gradientCSS` in characters.json) look messy and muddy when used as large chat backgrounds. We're replacing them entirely.
-
-### The New Approach: Accent Color + Ambient Blob
-
-Each character's visual identity now comes from **one single accent color** used in two ways:
-
-1. **Ambient blob**: ONE large, soft radial-gradient using the accent color at very low opacity (8-10%) on the chat background — gives a subtle color "mood" without being ugly
-2. **Accent color system**: The same color applied to interactive elements (send button, sidebar selection, input focus ring, bubble tints)
-
-### What to change in characters.json
-
-Remove these fields from every character's `theme` object — they are no longer needed:
-- `gradientCSS` (the multi-stop radial gradient — DELETE)
-- `bubbleBackground` (DELETE)
-- `bubbleBorder` (DELETE)
-
-Keep these fields — they are still used:
-- `cardGradient` (used on home page cards — looks fine at card size)
-- `gradientColors` (used by BorderGlow on home page cards)
-- `accentColor` (the single main color — this is now the primary theme driver)
-- `accentColorMuted` (low-opacity version for selections, hover states)
-
-Add this new field to every character's `theme` object:
-
-```json
-"ambientGlow": "radial-gradient(ellipse at 70% 15%, rgba(ACCENT_R, ACCENT_G, ACCENT_B, 0.08) 0%, transparent 55%)"
-```
-
-Where `ACCENT_R, ACCENT_G, ACCENT_B` are the RGB values of that character's `accentColor`. Here are the exact values per character:
-
-| Character | accentColor | ambientGlow |
-|---|---|---|
-| socrates | #c9a84c | `radial-gradient(ellipse at 70% 15%, rgba(201, 168, 76, 0.08) 0%, transparent 55%)` |
-| shakespeare | #c44d7b | `radial-gradient(ellipse at 70% 15%, rgba(196, 77, 123, 0.08) 0%, transparent 55%)` |
-| ramsay | #e05540 | `radial-gradient(ellipse at 70% 15%, rgba(224, 85, 64, 0.08) 0%, transparent 55%)` |
-| elon | #38bdf8 | `radial-gradient(ellipse at 70% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 55%)` |
-| intern | #f59e0b | `radial-gradient(ellipse at 70% 15%, rgba(245, 158, 11, 0.08) 0%, transparent 55%)` |
-| butcher | #b91c1c | `radial-gradient(ellipse at 70% 15%, rgba(185, 28, 28, 0.08) 0%, transparent 55%)` |
-| trump | #c9a84c | `radial-gradient(ellipse at 70% 15%, rgba(201, 168, 76, 0.08) 0%, transparent 55%)` |
-| bangalore | #f97316 | `radial-gradient(ellipse at 70% 15%, rgba(249, 115, 22, 0.08) 0%, transparent 55%)` |
-| luffy | #ef4444 | `radial-gradient(ellipse at 70% 15%, rgba(239, 68, 68, 0.08) 0%, transparent 55%)` |
-| karen | #f472b6 | `radial-gradient(ellipse at 70% 15%, rgba(244, 114, 182, 0.08) 0%, transparent 55%)` |
-
-### Add a noise texture overlay
-
-Add a subtle grain/noise texture to the chat messages area. This goes on top of the ambient blob and adds a premium "film-like" quality.
-
-Create this CSS class in `src/index.css`:
-
-```css
-.noise-overlay::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: 0.03;
-  pointer-events: none;
-  z-index: 1;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 256px;
-  border-radius: inherit;
-}
-```
-
-Apply the `noise-overlay` class to the messages area container in ChatInterface.jsx. Make sure the container has `position: relative` so the pseudo-element positions correctly.
-
----
-
-## 3. Chat Page Structure Overhaul
-
-This is the biggest change. The current chat page is two flat panels edge-to-edge with hard 1px borders. We're making it feel layered, spacious, and polished.
-
-### 3A. Overall Layout (ChatPage.jsx)
-
-**Current:** Sidebar and chat fill edge-to-edge with a hard border between them.
-
-**New:** Add padding around the panels, a gap between them, and round their corners.
+Find this entire block (lines 28-30) and DELETE it completely:
 
 ```jsx
-{/* In ChatPage.jsx, the flex container below the header */}
-<div className="flex h-[calc(100vh-64px)] p-3 gap-3">
-  <ChatSidebar ... />
-  <ChatInterface ... />
-</div>
+          <div className="inline-flex items-center px-5 py-2 rounded-full border border-white/15 bg-white/[0.04] backdrop-blur-sm text-[11px] uppercase tracking-[0.12em] text-white/60 mb-8">
+            Powered by Gemini
+          </div>
 ```
 
-- `p-3` (12px padding) around the entire chat area — panels float inside the viewport
-- `gap-3` (12px gap) between sidebar and chat — removes the hard border divider
+Delete those 3 lines. Do not replace them with anything.
 
-### 3B. Sidebar Overhaul (ChatSidebar.jsx)
+### 1B. Remove the tagline
 
-**Current:** Flat `#0f0f14` rectangle with cramped h-16 items and a left-border selection indicator.
+Find this block (lines 36-38) and DELETE it completely:
 
-**New design:**
-
-Container:
-- `w-[280px] flex-shrink-0 h-full bg-[#0f0f14] rounded-2xl overflow-hidden`
-- Add a subtle box-shadow: `shadow-lg shadow-black/20`
-- REMOVE the `border-r` — the gap handles separation now
-
-Add a header area at the top of the sidebar:
-- Text "Characters" — `text-xs uppercase tracking-wider text-[#606070] font-semibold`
-- Padding: `px-4 pt-4 pb-2`
-
-Each sidebar item — change from flat full-width rows to **rounded pill selection style**:
-- Remove `h-16`. Use `py-3 px-3 mx-2 rounded-xl` instead
-- Items have natural height based on content + padding
-- Add `mb-1` between items for spacing
-- Hover state: `bg-white/[0.04] rounded-xl` (NOT full-width highlight)
-- Selected state: background is `accentColorMuted`, NO left border — instead just the rounded background fill. Add a subtle `box-shadow: inset 0 0 0 1px accentColor/20%` for a soft ring effect
-- Transition: `transition-all duration-200 ease-out`
-
-Avatar in sidebar items:
-- Keep `w-10 h-10 rounded-xl` with `cardGradient` background
-- Add a subtle ring when selected: `ring-2 ring-offset-2 ring-offset-[#0f0f14]` using `ring-[accentColor]` (via inline style)
-
-Text in sidebar items:
-- Name: `text-sm font-semibold text-[#f0f0f2]` (same as now)
-- Below name: Show tagline truncated to 1 line — `text-xs text-[#505060] truncate` (slightly lighter than current #606070 for better differentiation)
-
-### 3C. Chat Panel Overhaul (ChatInterface.jsx)
-
-**Container:**
-- `flex-1 h-full flex flex-col rounded-2xl overflow-hidden`
-- Add `shadow-lg shadow-black/20`
-- Background: `#0a0a10` (slightly different shade from sidebar for depth differentiation)
-
-**Chat header (top bar):**
-- Increase height from `h-16` to `h-[72px]`
-- Background: `bg-[#0f0f14]` (solid, not transparent/blurred — looks cleaner against the ambient blob below)
-- REMOVE `border-b`. Add `shadow-sm` instead for a soft bottom edge
-- Add more padding: `px-6`
-- Avatar: increase to `w-10 h-10 rounded-xl`
-- Below the character name, show the tagline (truncated) in `text-xs text-[#606070]` instead of the category text
-- Keep the green status dot with pulse animation
-- Add the character's category as a small badge pill next to the name: `text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full` with `bg-accentColorMuted text-accentColor`
-
-**Messages area:**
-- Background: `bg-[#0a0a10]` (the base dark color)
-- On top of this, apply the character's `ambientGlow` as inline style background
-- Add the `noise-overlay` class for grain texture
-- REMOVE `border-t` and `border-b` from surrounding elements — use shadows instead
-- Increase padding: `p-8` (more breathing room)
-- Increase gap between messages: `gap-4`
-
-**Message grouping:**
-When consecutive messages are from the same role (e.g., multiple model messages in a row, which is unlikely but possible, or multiple user messages), group them:
-- Only show the avatar on the FIRST message in a group
-- Subsequent messages in the same group: indent them to align with the first message's text (no avatar, just the bubble)
-- Add `gap-1` between messages in the same group, `gap-4` between different groups
-
-**Message bubbles (MessageBubble.jsx):**
-- Character bubbles: Replace `bg-black/50 border border-white/[0.08]` with `bg-[#141418] border border-white/[0.05]`
-  - Add subtle box-shadow: `shadow-md shadow-black/20`
-  - Add a very faint accent tint to the left border: `border-l-2` with `border-l-[accentColor/30%]` (via inline style)
-- User bubbles: Replace `bg-white/10 border border-white/[0.12]` with `bg-[#1a1a22] border border-white/[0.06]`
-  - Add `shadow-md shadow-black/20`
-- Both: Increase padding from `px-4 py-3` to `px-5 py-3.5`
-- Both: Add a tiny timestamp below each bubble: `text-[10px] text-[#404050] mt-1` — show "just now" for new messages (you can hardcode this, it doesn't need to be real)
-- Corners: Keep the asymmetric rounding (sharp corner on the avatar side) — it looks good
-
-**Typing indicator:**
-- Move it to just above the input bar rather than inline with messages
-- Or keep it inline but style it better: wrap it in a subtle `bg-[#141418]/60 rounded-xl px-4 py-2 inline-flex` so it feels like a bubble itself
-
-**Input area:**
-- REMOVE `border-t`. Add a subtle `shadow-[0_-2px_10px_rgba(0,0,0,0.2)]` for a soft top edge
-- Background: `bg-[#0e0e14]`
-- More padding: `p-4 px-6`
-- Input wrapper: increase height — `py-3` instead of `py-2`, make it `rounded-2xl` instead of `rounded-full`
-- Add a placeholder icon/button on the left side of the input (a small circle, 32px, `bg-white/[0.04] rounded-lg`, with a "+" or paperclip icon). This doesn't need to function — it's just visual weight so the input doesn't look bare.
-- Send button: increase to `w-10 h-10`, `rounded-xl` instead of `rounded-full`
-- When input is empty, the send button should have `opacity-30` and no hover effect
-- When input has text, the send button scales in with a smooth transition (`scale-100 opacity-100`)
-- Focus state: input wrapper gets `ring-2 ring-accentColor/30%` (via inline style on focus) and `shadow-lg shadow-accentColor/10%` — a soft glow, not a hard border change
-
-**Empty state (no messages yet):**
-- Keep the centered avatar + "Start a conversation with {name}" text
-- Add **3 conversation starter pills** below the text
-- These are clickable rounded buttons that pre-fill the input when clicked
-- Style: `px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.06] text-sm text-[#a0a0b0] hover:bg-white/[0.08] hover:text-white transition-all cursor-pointer`
-- Arrange them in a flex-wrap row, centered, with `gap-2 mt-6`
-
-Here are the conversation starters per character:
-
-```javascript
-const CONVERSATION_STARTERS = {
-  socrates: ["What is the meaning of justice?", "Question my beliefs", "Teach me wisdom"],
-  shakespeare: ["Write me a sonnet", "What inspired Hamlet?", "Insult me poetically"],
-  ramsay: ["Rate my cooking skills", "What's the worst dish ever?", "Teach me a recipe"],
-  elon: ["How do we get to Mars?", "What's the future of AI?", "Roast my startup idea"],
-  intern: ["Tell me about your first day", "What's your LinkedIn strategy?", "How's the coffee here?"],
-  butcher: ["What do you think of superheroes?", "Tell me about Homelander", "Got any life advice?"],
-  trump: ["Make my life great again", "What's your best deal?", "Rate my business idea"],
-  bangalore: ["How's the traffic today?", "Best filter coffee spot?", "Tell me about IT life"],
-  luffy: ["Who's the strongest pirate?", "Tell me about your crew", "What's your favorite food?"],
-  karen: ["I have a complaint", "Can I see the manager?", "Rate this customer service"],
-}
+```jsx
+          <p className="text-lg text-[#a0a0b0] mt-4 max-w-md mx-auto">
+            Pick a personality. Start a conversation. Regret nothing.
+          </p>
 ```
 
-### 3D. Background transition when switching characters
+Delete those 3 lines. Do not replace them with anything.
 
-**Current:** The `gradientCSS` cross-fades using an overlay div. 
+After 1A and 1B, the hero section should only contain the h1 "MindClash" title. Nothing else.
 
-**New:** Since we're using a single ambient blob now, the transition is simpler. Just apply `transition: background 600ms ease` on the messages area container. The radial-gradient will smoothly morph between characters' colors. Remove the `oldGradient` state and the overlay div — they're no longer needed.
+### 1C. Remove the footer
+
+Find this block (lines 63-65) and DELETE it completely:
+
+```jsx
+      <footer className="text-center text-[#606070] text-[13px] pb-12">
+        Built for fun. Powered by Gemini. No managers were harmed.
+      </footer>
+```
+
+Delete those 3 lines. Do not replace them with anything.
 
 ---
 
-## 4. Home Page Grid Fix
+## Change 2: Chat Header — make it more prominent (src/components/ChatInterface.jsx)
 
-**Current:** The grid is `grid-cols-1 md:grid-cols-3 lg:grid-cols-4`. With 10 characters and 4 columns, the last row has 2 orphaned cards that look unbalanced.
+Find the current chat header (the div that starts with `className="h-[72px]`). Replace the ENTIRE header div (from the opening `<div className="h-[72px]` to its closing `</div>` that contains the green dot) with this:
 
-**Fix:** Change to `lg:grid-cols-3` instead of `lg:grid-cols-4`. With 3 columns and 10 cards: rows of 3-3-3-1. The single orphaned card in the last row is less awkward than 2. Alternatively, change to `lg:grid-cols-5` to get 5-5, which is perfectly balanced.
+```jsx
+      <div className="flex-shrink-0 bg-[#0f0f14] shadow-sm z-10">
+        <div className="flex items-center px-6 py-5 gap-4">
+          <div
+            className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg"
+            style={{ background: character.theme.cardColor }}
+          >
+            <span className="text-white text-lg font-bold">{character.avatarInitials}</span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2.5">
+              <p className="font-heading font-semibold text-lg text-white">{character.name}</p>
+              <span
+                className="text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full"
+                style={{
+                  background: character.theme.accentColorMuted,
+                  color: character.theme.accentColor,
+                }}
+              >
+                {character.category}
+              </span>
+              <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse-dot" />
+            </div>
+            <p className="text-[13px] text-[#707080] mt-0.5 truncate">{character.tagline}</p>
+          </div>
+        </div>
+      </div>
+```
 
-Recommended: **Use `lg:grid-cols-5`** with 5 columns for a clean 5-5 layout. Reduce the `gap-x-10` to `gap-6` so cards aren't too stretched. If 5 columns makes the cards too narrow on smaller desktops, use `xl:grid-cols-5 lg:grid-cols-3` instead.
+Key differences from the old header:
+- No fixed height. Uses `py-5` padding instead, making it naturally taller (~90px)
+- Avatar is bigger: `w-14 h-14 rounded-2xl` with `shadow-lg` (was w-10 h-10)
+- Name is larger: `text-lg` (was text-base)
+- Green dot is inline next to the name, not floating on the right edge
+- Tagline text is slightly lighter: `#707080` (was #606070)
+- More horizontal padding: `gap-4` between avatar and text (was gap-3)
 
 ---
 
-## 5. Summary of Files to Modify
+## Change 3: Empty state — use character's tagline (src/components/ChatInterface.jsx)
 
-| File | Changes |
+Find the empty state block. It currently looks like this:
+
+```jsx
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <div
+              className="w-20 h-20 rounded-2xl flex items-center justify-center"
+              style={{ background: character.theme.cardColor }}
+            >
+              <span className="text-white text-2xl font-bold">{character.avatarInitials}</span>
+            </div>
+            <p className="text-[#a0a0b0] text-base mt-4">
+              Start a conversation with {character.name}
+            </p>
+            <p className="text-[#606070] text-[13px] mt-1">
+              Say hello, ask a question, or just vibe.
+            </p>
+```
+
+Replace it with this (everything from the opening `<div className="flex-1 flex flex-col items-center justify-center">` to the `<p>` tags, but NOT the conversation starters section below):
+
+```jsx
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <div
+              className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg"
+              style={{ background: character.theme.cardColor }}
+            >
+              <span className="text-white text-2xl font-bold">{character.avatarInitials}</span>
+            </div>
+            <p className="text-[#808090] text-[15px] mt-5 italic max-w-sm text-center">
+              "{character.tagline}"
+            </p>
+```
+
+Key differences:
+- Removed the generic "Start a conversation with..." text
+- Removed the "Say hello, ask a question, or just vibe." text
+- Instead shows the character's own tagline in quotes, italic, centered
+- Avatar gets `shadow-lg`
+- Slightly more margin-top (`mt-5` instead of `mt-4`)
+
+Keep the conversation starters section (`{starters.length > 0 && (...)}`) exactly as it is. Do not change it.
+
+---
+
+## Change 4: Remove the "+" button from input bar (src/components/ChatInterface.jsx)
+
+Find this entire block inside the input wrapper div and DELETE it:
+
+```jsx
+          <div className="w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center flex-shrink-0 text-[#606070] text-lg leading-none">
+            +
+          </div>
+```
+
+Delete those 3 lines. Do not replace them with anything.
+
+Then update the input wrapper div's classes. Find:
+
+```
+className="flex items-center gap-3 bg-white/[0.06] border border-white/[0.08] rounded-2xl pl-3 pr-2 py-3 transition-all duration-200"
+```
+
+Replace with (only the `pl-3` changes to `pl-5`):
+
+```
+className="flex items-center gap-3 bg-white/[0.06] border border-white/[0.08] rounded-2xl pl-5 pr-2 py-3 transition-all duration-200"
+```
+
+---
+
+## Change 5: Character message bubbles — add accent tint (src/components/MessageBubble.jsx)
+
+The current character bubble uses flat `bg-[#141418]`. We want to add a subtle tint of the character's accent color to make each character's messages feel distinct.
+
+Find the current bubble div. It contains this className logic:
+
+```jsx
+          className={`px-5 py-3.5 text-sm text-[#f0f0f2] leading-relaxed shadow-md shadow-black/20 ${
+            isUser
+              ? 'bg-[#1a1a22] border border-white/[0.06] rounded-[16px_2px_16px_16px]'
+              : 'bg-[#141418] border border-white/[0.05] rounded-[2px_16px_16px_16px]'
+          }`}
+          style={
+            !isUser
+              ? { borderLeft: `2px solid ${character.theme.accentColor}4d` }
+              : undefined
+          }
+```
+
+Replace the ENTIRE className and style attributes with:
+
+```jsx
+          className={`px-5 py-3.5 text-sm text-[#f0f0f2] leading-relaxed ${
+            isUser
+              ? 'bg-[#1a1a22] border border-white/[0.06] rounded-[16px_2px_16px_16px] shadow-md shadow-black/20'
+              : 'rounded-[2px_16px_16px_16px] shadow-lg shadow-black/30'
+          }`}
+          style={
+            !isUser
+              ? {
+                  background: `linear-gradient(135deg, ${character.theme.accentColor}0a 0%, ${character.theme.accentColor}03 100%)`,
+                  border: `1px solid ${character.theme.accentColor}15`,
+                  borderLeft: `2px solid ${character.theme.accentColor}40`,
+                }
+              : undefined
+          }
+```
+
+What changed for character (non-user) bubbles:
+- Background is now a very subtle gradient using the accent color at ~4% opacity (`0a` hex = ~4%) fading to ~1% (`03` hex), instead of flat `#141418`
+- Border uses accent color at ~8% opacity (`15` hex) instead of flat `white/[0.05]`
+- Left border accent stays but slightly stronger: `40` instead of `4d`
+- Shadow is upgraded to `shadow-lg shadow-black/30` for more depth
+- User bubbles stay exactly the same
+
+---
+
+## Change 6: Sidebar visual differentiation (src/components/ChatSidebar.jsx)
+
+Make the sidebar feel more recessed/secondary compared to the chat panel.
+
+Find the aside element's className:
+
+```
+className="w-[280px] flex-shrink-0 h-full bg-[#0f0f14] rounded-2xl overflow-hidden shadow-lg shadow-black/20 flex flex-col"
+```
+
+Replace with:
+
+```
+className="w-[280px] flex-shrink-0 h-full bg-[#0b0b10] rounded-2xl overflow-hidden shadow-lg shadow-black/20 flex flex-col"
+```
+
+The only change is `bg-[#0f0f14]` becomes `bg-[#0b0b10]` — slightly darker, making it visually recede behind the chat panel which is `#0a0a10` with the ambient glow on top. The sidebar reads as the "background" layer and the chat panel reads as "foreground".
+
+Also update the avatar ring selected state. Find:
+
+```jsx
+                    ...(isSelected ? { boxShadow: `0 0 0 2px #0f0f14, 0 0 0 4px ${character.theme.accentColor}` } : {}),
+```
+
+Replace with (update the ring offset color to match the new background):
+
+```jsx
+                    ...(isSelected ? { boxShadow: `0 0 0 2px #0b0b10, 0 0 0 4px ${character.theme.accentColor}` } : {}),
+```
+
+---
+
+## Change 7: Ambient glow originates from behind the header (src/components/ChatInterface.jsx)
+
+Currently the ambient glow is positioned at `70% 15%` (top-right area). We want it to feel like it emanates from behind the chat header, casting a soft colored light downward into the messages area.
+
+This change is in characters.json. For EVERY character, update the `ambientGlow` value. Change the ellipse position from `70% 15%` to `50% -5%` and increase the size slightly. Here are the exact new values:
+
+```
+socrates:   "radial-gradient(ellipse at 50% -5%, rgba(201, 168, 76, 0.10) 0%, transparent 60%)"
+shakespeare: "radial-gradient(ellipse at 50% -5%, rgba(196, 77, 123, 0.10) 0%, transparent 60%)"
+ramsay:     "radial-gradient(ellipse at 50% -5%, rgba(224, 85, 64, 0.10) 0%, transparent 60%)"
+elon:       "radial-gradient(ellipse at 50% -5%, rgba(56, 189, 248, 0.10) 0%, transparent 60%)"
+intern:     "radial-gradient(ellipse at 50% -5%, rgba(245, 158, 11, 0.10) 0%, transparent 60%)"
+butcher:    "radial-gradient(ellipse at 50% -5%, rgba(185, 28, 28, 0.10) 0%, transparent 60%)"
+trump:      "radial-gradient(ellipse at 50% -5%, rgba(201, 168, 76, 0.10) 0%, transparent 60%)"
+bangalore:  "radial-gradient(ellipse at 50% -5%, rgba(249, 115, 22, 0.10) 0%, transparent 60%)"
+luffy:      "radial-gradient(ellipse at 50% -5%, rgba(239, 68, 68, 0.10) 0%, transparent 60%)"
+karen:      "radial-gradient(ellipse at 50% -5%, rgba(244, 114, 182, 0.10) 0%, transparent 60%)"
+```
+
+Changes from old values:
+- Position: `70% 15%` → `50% -5%` (centered horizontally, origin above the top edge)
+- Opacity: `0.08` → `0.10` (slightly stronger since it's further away)
+- Spread: `55%` → `60%` (larger to cover more of the messages area)
+
+---
+
+## Summary of files to modify
+
+| File | What to change |
 |---|---|
-| `src/data/characters.json` | Remove `gradientCSS`, `bubbleBackground`, `bubbleBorder` from all characters. Add `ambientGlow` to all characters. |
-| `src/components/Header.jsx` | Remove "About" link. Add optional `fullWidth` prop to conditionally remove `max-w-[1200px]`. |
-| `src/components/ChatSidebar.jsx` | Complete overhaul — rounded corners, pill selection, header label, better spacing, remove border-r. |
-| `src/components/ChatInterface.jsx` | Replace gradient background with ambient blob + noise. New chat header design. Better input area. Add conversation starters. Remove old gradient crossfade logic. Simplify background transition. |
-| `src/components/MessageBubble.jsx` | New bubble colors (solid darks instead of transparent). Add timestamps. Add accent-tinted left border on character bubbles. Fix re-animation bug with `isNew` prop. |
-| `src/pages/ChatPage.jsx` | Add `p-3 gap-3` to the flex container. Pass `fullWidth` to Header. |
-| `src/pages/HomePage.jsx` | Change grid columns to `lg:grid-cols-5` or `xl:grid-cols-5 lg:grid-cols-3`. Reduce gap. |
-| `src/index.css` | Add `.noise-overlay` class. |
-| Root | Delete `deno.lock`. |
+| `src/pages/HomePage.jsx` | Delete "Powered by Gemini" badge (3 lines), delete tagline (3 lines), delete footer (3 lines) |
+| `src/components/ChatInterface.jsx` | Replace chat header with bigger version, update empty state text, delete "+" button, update input wrapper padding |
+| `src/components/MessageBubble.jsx` | Replace character bubble background/border/shadow with accent-tinted version |
+| `src/components/ChatSidebar.jsx` | Change background from `#0f0f14` to `#0b0b10`, update ring offset color |
+| `src/data/characters.json` | Update `ambientGlow` value for all 10 characters |
 
-### Important Notes for Implementation
+## Files NOT to touch
 
-- Do NOT touch `src/components/LightRays.jsx`, `BorderGlow.jsx`, `TiltedCard.jsx`, or their CSS files — these are working fine on the home page.
-- Do NOT touch `netlify/functions/chat.js` — the backend is complete.
-- Do NOT change the `cardGradient` or `gradientColors` values in characters.json — they are used by the home page cards and look fine at that size.
-- Do NOT add emojis anywhere in the UI. Use text initials for avatars.
-- Use Tailwind v3 syntax only. No `@theme` directive, no v4 features.
-- After making all changes, verify the app runs with `npm run dev`.
+- `src/components/LightRays.jsx` and `LightRays.css`
+- `src/components/BorderGlow.jsx` and `BorderGlow.css`
+- `src/components/TiltedCard.jsx` and `TiltedCard.css`
+- `src/components/Header.jsx`
+- `src/App.jsx`
+- `src/main.jsx`
+- `src/index.css`
+- `netlify/functions/chat.js`
+- `src/components/CharacterCard.jsx`
+- `src/pages/ChatPage.jsx`

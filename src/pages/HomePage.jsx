@@ -25,17 +25,10 @@ function HomePage() {
 
       <main className="max-w-[1200px] mx-auto px-6">
         <section className="pt-20 pb-12 text-center">
-          <div className="inline-flex items-center px-5 py-2 rounded-full border border-white/15 bg-white/[0.04] backdrop-blur-sm text-[11px] uppercase tracking-[0.12em] text-white/60 mb-8">
-            Powered by Gemini
-          </div>
 
           <h1 className="font-heading font-extrabold text-6xl animate-shimmer">
             MindClash
           </h1>
-
-          <p className="text-lg text-[#a0a0b0] mt-4 max-w-md mx-auto">
-            Pick a personality. Start a conversation. Regret nothing.
-          </p>
         </section>
 
         <section className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-6 pt-6">
@@ -59,10 +52,6 @@ function HomePage() {
           </Link>
         </section>
       </main>
-
-      <footer className="text-center text-[#606070] text-[13px] pb-12">
-        Built for fun. Powered by Gemini. No managers were harmed.
-      </footer>
       </div>
     </div>
   )

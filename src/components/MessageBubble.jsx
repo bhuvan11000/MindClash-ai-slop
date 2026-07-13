@@ -23,14 +23,18 @@ function MessageBubble({ message, character, isNew, showAvatar = true }) {
       )}
       <div className="flex flex-col">
         <div
-          className={`px-5 py-3.5 text-sm text-[#f0f0f2] leading-relaxed shadow-md shadow-black/20 ${
+          className={`px-5 py-3.5 text-sm text-[#f0f0f2] leading-relaxed ${
             isUser
-              ? 'bg-[#1a1a22] border border-white/[0.06] rounded-[16px_2px_16px_16px]'
-              : 'bg-[#141418] border border-white/[0.05] rounded-[2px_16px_16px_16px]'
+              ? 'bg-[#1a1a22] border border-white/[0.06] rounded-[16px_2px_16px_16px] shadow-md shadow-black/20'
+              : 'rounded-[2px_16px_16px_16px] shadow-lg shadow-black/30'
           }`}
           style={
             !isUser
-              ? { borderLeft: `2px solid ${character.theme.accentColor}4d` }
+              ? {
+                  background: `linear-gradient(135deg, ${character.theme.accentColor}0a 0%, ${character.theme.accentColor}03 100%)`,
+                  border: `1px solid ${character.theme.accentColor}15`,
+                  borderLeft: `2px solid ${character.theme.accentColor}40`,
+                }
               : undefined
           }
         >
