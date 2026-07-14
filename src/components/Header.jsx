@@ -5,7 +5,7 @@ function Header({ fullWidth }) {
     <header className={`sticky z-50 h-14 bg-black/40 backdrop-blur-xl rounded-full border border-white/[0.06] flex items-center px-5 transition-all duration-200 ${fullWidth ? 'top-3 mx-3 mt-3' : 'top-3 mt-3 max-w-[1200px] mx-auto'}`}>
       <div className="w-full mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2.5">
-          <img src="/avatars/luffy.svg" alt="MindClash" className="w-6 h-6 rounded-full" />
+          <img src="/avatars/luffy.webp" alt="MindClash" className="w-6 h-6 rounded-full" />
           <span className="font-heading font-bold text-lg text-white">MindClash</span>
         </Link>
         <Link
