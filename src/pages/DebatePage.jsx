@@ -107,7 +107,7 @@ function DebatePage() {
                 <div className="w-8 h-8 flex-shrink-0 border-[2px] border-[--color-ink] overflow-hidden"
                   style={{ background: character.theme.cardColor }}
                 >
-                  <img src={"/avatars/" + character.id + ".webp"} alt={character.name} className="w-full h-full object-cover" />
+                  <img src={"/avatars/" + character.id + ".webp"} alt={character.name} draggable="false" className="w-full h-full object-cover select-none" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-mono text-[11px] uppercase tracking-wider text-[--color-ink] font-semibold truncate">{character.name}</p>
@@ -141,7 +141,7 @@ function DebatePage() {
                 <div className="w-8 h-8 flex-shrink-0 border-[2px] border-[--color-ink] overflow-hidden"
                   style={{ background: character.theme.cardColor }}
                 >
-                  <img src={"/avatars/" + character.id + ".webp"} alt={character.name} className="w-full h-full object-cover" />
+                  <img src={"/avatars/" + character.id + ".webp"} alt={character.name} draggable="false" className="w-full h-full object-cover select-none" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-mono text-[11px] uppercase tracking-wider text-[--color-ink] font-semibold truncate">{character.name}</p>
