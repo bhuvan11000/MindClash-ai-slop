@@ -12,16 +12,12 @@ function DebatePage() {
     e.dataTransfer.effectAllowed = 'copy'
   }, [])
 
-  const handleDropLeft = useCallback((e) => {
-    e.preventDefault()
-    const id = e.dataTransfer.getData('text/plain')
+  const handleDropLeft = useCallback((id) => {
     const char = characters.find(c => c.id === id)
     if (char && char.id !== rightCharacter?.id) setLeftCharacter(char)
   }, [rightCharacter])
 
-  const handleDropRight = useCallback((e) => {
-    e.preventDefault()
-    const id = e.dataTransfer.getData('text/plain')
+  const handleDropRight = useCallback((id) => {
     const char = characters.find(c => c.id === id)
     if (char && char.id !== leftCharacter?.id) setRightCharacter(char)
   }, [leftCharacter])

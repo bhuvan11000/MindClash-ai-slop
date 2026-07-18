@@ -16,50 +16,71 @@ function buildMessages(topic, debateHistory, speakingChar, otherChar) {
   return msgs
 }
 
+function useDnDZone(onDropChar) {
+  const ref = useRef(null)
+  const [isOver, setIsOver] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    const handleDragOver = (e) => {
+      e.preventDefault()
+      e.dataTransfer.dropEffect = 'copy'
+    }
+
+    const handleDragEnter = (e) => {
+      e.preventDefault()
+      setIsOver(true)
+    }
+
+    const handleDragLeave = (e) => {
+      if (e.currentTarget === el || !el.contains(e.relatedTarget)) {
+        setIsOver(false)
+      }
+    }
+
+    const handleDrop = (e) => {
+      e.preventDefault()
+      setIsOver(false)
+      const id = e.dataTransfer.getData('text/plain')
+      onDropChar(id)
+    }
+
+    el.addEventListener('dragover', handleDragOver)
+    el.addEventListener('dragenter', handleDragEnter)
+    el.addEventListener('dragleave', handleDragLeave)
+    el.addEventListener('drop', handleDrop)
+
+    return () => {
+      el.removeEventListener('dragover', handleDragOver)
+      el.removeEventListener('dragenter', handleDragEnter)
+      el.removeEventListener('dragleave', handleDragLeave)
+      el.removeEventListener('drop', handleDrop)
+    }
+  }, [onDropChar])
+
+  return [ref, isOver]
+}
+
 function DebateInterface({ leftCharacter, rightCharacter, onDropLeft, onDropRight, onClearLeft, onClearRight }) {
   const [topic, setTopic] = useState('')
   const [debateHistory, setDebateHistory] = useState([])
   const [isDebating, setIsDebating] = useState(false)
-  const [dragOverLeft, setDragOverLeft] = useState(false)
-  const [dragOverRight, setDragOverRight] = useState(false)
   const [leftSpeaking, setLeftSpeaking] = useState(false)
   const [rightSpeaking, setRightSpeaking] = useState(false)
   const abortRef = useRef(false)
 
-  const handleDragOver = useCallback((e) => {
-    e.preventDefault()
-    e.dataTransfer.dropEffect = 'copy'
-  }, [])
+  const handleDropLeft = useCallback((id) => {
+    if (id && id !== rightCharacter?.id) onDropLeft(id)
+  }, [rightCharacter, onDropLeft])
 
-  const handleDragEnterLeft = useCallback((e) => {
-    e.preventDefault()
-    setDragOverLeft(true)
-  }, [])
+  const handleDropRight = useCallback((id) => {
+    if (id && id !== leftCharacter?.id) onDropRight(id)
+  }, [leftCharacter, onDropRight])
 
-  const handleDragLeaveLeft = useCallback((e) => {
-    e.preventDefault()
-    setDragOverLeft(false)
-  }, [])
-
-  const handleDropLeftPanel = useCallback((e) => {
-    setDragOverLeft(false)
-    onDropLeft(e)
-  }, [onDropLeft])
-
-  const handleDragEnterRight = useCallback((e) => {
-    e.preventDefault()
-    setDragOverRight(true)
-  }, [])
-
-  const handleDragLeaveRight = useCallback((e) => {
-    e.preventDefault()
-    setDragOverRight(false)
-  }, [])
-
-  const handleDropRightPanel = useCallback((e) => {
-    setDragOverRight(false)
-    onDropRight(e)
-  }, [onDropRight])
+  const [leftRef, leftOver] = useDnDZone(handleDropLeft)
+  const [rightRef, rightOver] = useDnDZone(handleDropRight)
 
   const startDebate = useCallback(async () => {
     if (!leftCharacter || !rightCharacter || !topic.trim()) return
@@ -138,12 +159,9 @@ function DebateInterface({ leftCharacter, rightCharacter, onDropLeft, onDropRigh
     <div className="flex-1 flex flex-col bg-white">
       <div className="flex-1 flex min-h-0">
         <div
-          className={'flex-1 flex flex-col border-r-[3px] border-[--color-ink] overflow-hidden transition-colors duration-150 ' + (dragOverLeft ? 'bg-black/[0.03]' : '')}
+          ref={leftRef}
+          className={'flex-1 flex flex-col border-r-[3px] border-[--color-ink] overflow-hidden transition-colors duration-150 ' + (leftOver ? 'bg-black/[0.03]' : '')}
           style={leftCharacter ? { background: 'color-mix(in srgb, ' + leftCharacter.theme.cardColor + ' 8%, #ffffff)' } : {}}
-          onDragOver={handleDragOver}
-          onDragEnter={handleDragEnterLeft}
-          onDragLeave={handleDragLeaveLeft}
-          onDrop={handleDropLeftPanel}
         >
           {leftCharacter ? (
             <>
@@ -190,12 +208,9 @@ function DebateInterface({ leftCharacter, rightCharacter, onDropLeft, onDropRigh
         </div>
 
         <div
-          className={'flex-1 flex flex-col overflow-hidden transition-colors duration-150 ' + (dragOverRight ? 'bg-black/[0.03]' : '')}
+          ref={rightRef}
+          className={'flex-1 flex flex-col overflow-hidden transition-colors duration-150 ' + (rightOver ? 'bg-black/[0.03]' : '')}
           style={rightCharacter ? { background: 'color-mix(in srgb, ' + rightCharacter.theme.cardColor + ' 8%, #ffffff)' } : {}}
-          onDragOver={handleDragOver}
-          onDragEnter={handleDragEnterRight}
-          onDragLeave={handleDragLeaveRight}
-          onDrop={handleDropRightPanel}
         >
           {rightCharacter ? (
             <>
