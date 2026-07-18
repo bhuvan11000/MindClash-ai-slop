@@ -16,71 +16,56 @@ function buildMessages(topic, debateHistory, speakingChar, otherChar) {
   return msgs
 }
 
-function useDnDZone(onDropChar) {
-  const ref = useRef(null)
-  const [isOver, setIsOver] = useState(false)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-
-    const handleDragOver = (e) => {
-      e.preventDefault()
-      e.dataTransfer.dropEffect = 'copy'
-    }
-
-    const handleDragEnter = (e) => {
-      e.preventDefault()
-      setIsOver(true)
-    }
-
-    const handleDragLeave = (e) => {
-      if (e.currentTarget === el || !el.contains(e.relatedTarget)) {
-        setIsOver(false)
-      }
-    }
-
-    const handleDrop = (e) => {
-      e.preventDefault()
-      setIsOver(false)
-      const id = e.dataTransfer.getData('text/plain')
-      onDropChar(id)
-    }
-
-    el.addEventListener('dragover', handleDragOver)
-    el.addEventListener('dragenter', handleDragEnter)
-    el.addEventListener('dragleave', handleDragLeave)
-    el.addEventListener('drop', handleDrop)
-
-    return () => {
-      el.removeEventListener('dragover', handleDragOver)
-      el.removeEventListener('dragenter', handleDragEnter)
-      el.removeEventListener('dragleave', handleDragLeave)
-      el.removeEventListener('drop', handleDrop)
-    }
-  }, [onDropChar])
-
-  return [ref, isOver]
-}
-
 function DebateInterface({ leftCharacter, rightCharacter, onDropLeft, onDropRight, onClearLeft, onClearRight }) {
   const [topic, setTopic] = useState('')
   const [debateHistory, setDebateHistory] = useState([])
   const [isDebating, setIsDebating] = useState(false)
   const [leftSpeaking, setLeftSpeaking] = useState(false)
   const [rightSpeaking, setRightSpeaking] = useState(false)
+  const [dragSide, setDragSide] = useState(null)
   const abortRef = useRef(false)
+  const containerRef = useRef(null)
 
-  const handleDropLeft = useCallback((id) => {
-    if (id && id !== rightCharacter?.id) onDropLeft(id)
-  }, [rightCharacter, onDropLeft])
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
 
-  const handleDropRight = useCallback((id) => {
-    if (id && id !== leftCharacter?.id) onDropRight(id)
-  }, [leftCharacter, onDropRight])
+    const handleDragOver = (e) => {
+      e.preventDefault()
+      e.dataTransfer.dropEffect = 'copy'
+      const rect = el.getBoundingClientRect()
+      const midX = rect.left + rect.width / 2
+      setDragSide(e.clientX < midX ? 'left' : 'right')
+    }
 
-  const [leftRef, leftOver] = useDnDZone(handleDropLeft)
-  const [rightRef, rightOver] = useDnDZone(handleDropRight)
+    const handleDragLeave = (e) => {
+      if (!el.contains(e.relatedTarget)) setDragSide(null)
+    }
+
+    const handleDrop = (e) => {
+      e.preventDefault()
+      setDragSide(null)
+      const id = e.dataTransfer.getData('text/plain')
+      if (!id) return
+      const rect = el.getBoundingClientRect()
+      const midX = rect.left + rect.width / 2
+      if (e.clientX < midX) {
+        onDropLeft(id)
+      } else {
+        onDropRight(id)
+      }
+    }
+
+    el.addEventListener('dragover', handleDragOver)
+    el.addEventListener('dragleave', handleDragLeave)
+    el.addEventListener('drop', handleDrop)
+
+    return () => {
+      el.removeEventListener('dragover', handleDragOver)
+      el.removeEventListener('dragleave', handleDragLeave)
+      el.removeEventListener('drop', handleDrop)
+    }
+  }, [onDropLeft, onDropRight])
 
   const startDebate = useCallback(async () => {
     if (!leftCharacter || !rightCharacter || !topic.trim()) return
@@ -156,11 +141,10 @@ function DebateInterface({ leftCharacter, rightCharacter, onDropLeft, onDropRigh
   const rightMessages = debateHistory.filter(e => e.characterId === rightCharacter?.id)
 
   return (
-    <div className="flex-1 flex flex-col bg-white">
+    <div ref={containerRef} className={'flex-1 flex flex-col bg-white transition-colors duration-150 ' + (dragSide ? 'bg-black/[0.02]' : '')}>
       <div className="flex-1 flex min-h-0">
         <div
-          ref={leftRef}
-          className={'flex-1 flex flex-col border-r-[3px] border-[--color-ink] overflow-hidden transition-colors duration-150 ' + (leftOver ? 'bg-black/[0.03]' : '')}
+          className={'flex-1 flex flex-col border-r-[3px] border-[--color-ink] overflow-hidden transition-colors duration-150 ' + (dragSide === 'left' ? 'bg-black/[0.04]' : '')}
           style={leftCharacter ? { background: 'color-mix(in srgb, ' + leftCharacter.theme.cardColor + ' 8%, #ffffff)' } : {}}
         >
           {leftCharacter ? (
@@ -177,6 +161,9 @@ function DebateInterface({ leftCharacter, rightCharacter, onDropLeft, onDropRigh
                 <button onClick={onClearLeft} className="font-mono text-[10px] uppercase tracking-wider text-[--color-ink-muted] hover:text-[--color-ink] cursor-pointer">Remove</button>
               </div>
               <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
+                {leftMessages.length === 0 && !leftSpeaking && (
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-[--color-ink-muted] text-center mt-8">Waiting for debate...</p>
+                )}
                 {leftMessages.map((msg, i) => (
                   <div key={i} className="bg-white border-[2px] border-[--color-ink] shadow-[--shadow-sm] px-4 py-3"
                     style={{ borderRadius: '2px 2px 14px 2px' }}
@@ -208,8 +195,7 @@ function DebateInterface({ leftCharacter, rightCharacter, onDropLeft, onDropRigh
         </div>
 
         <div
-          ref={rightRef}
-          className={'flex-1 flex flex-col overflow-hidden transition-colors duration-150 ' + (rightOver ? 'bg-black/[0.03]' : '')}
+          className={'flex-1 flex flex-col overflow-hidden transition-colors duration-150 ' + (dragSide === 'right' ? 'bg-black/[0.04]' : '')}
           style={rightCharacter ? { background: 'color-mix(in srgb, ' + rightCharacter.theme.cardColor + ' 8%, #ffffff)' } : {}}
         >
           {rightCharacter ? (
@@ -226,6 +212,9 @@ function DebateInterface({ leftCharacter, rightCharacter, onDropLeft, onDropRigh
                 </div>
               </div>
               <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 items-end">
+                {rightMessages.length === 0 && !rightSpeaking && (
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-[--color-ink-muted] text-center mt-8 w-full">Waiting for debate...</p>
+                )}
                 {rightMessages.map((msg, i) => (
                   <div key={i} className="bg-white border-[2px] border-[--color-ink] shadow-[--shadow-sm] px-4 py-3"
                     style={{ borderRadius: '2px 2px 2px 14px' }}
