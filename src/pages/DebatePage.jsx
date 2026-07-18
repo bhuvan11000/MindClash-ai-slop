@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import Header from '../components/Header'
 import DebateInterface from '../components/DebateInterface'
 import characters from '../data/characters.json'
@@ -6,6 +6,8 @@ import characters from '../data/characters.json'
 function DebatePage() {
   const [leftCharacter, setLeftCharacter] = useState(null)
   const [rightCharacter, setRightCharacter] = useState(null)
+  const [dragSide, setDragSide] = useState(null)
+  const rowRef = useRef(null)
 
   const handleDragStart = useCallback((e, characterId) => {
     e.dataTransfer.setData('text/plain', characterId)
@@ -22,10 +24,73 @@ function DebatePage() {
     if (char && char.id !== leftCharacter?.id) setRightCharacter(char)
   }, [leftCharacter])
 
+  useEffect(() => {
+    const el = rowRef.current
+    if (!el) return
+
+    let targetId = null
+
+    const handleDragStart = (e) => {
+      targetId = e.target.closest('[data-char-id]')?.getAttribute('data-char-id')
+    }
+
+    const handleDragOver = (e) => {
+      e.preventDefault()
+      if (!targetId) return
+      e.dataTransfer.dropEffect = 'copy'
+      const rect = el.getBoundingClientRect()
+      const midX = rect.left + rect.width / 2
+      const sidebarLeft = 200
+      const sidebarRight = rect.width - 200
+      if (e.clientX - rect.left < sidebarLeft || e.clientX - rect.left > sidebarRight) {
+        setDragSide(null)
+      } else {
+        setDragSide(e.clientX < midX ? 'left' : 'right')
+      }
+    }
+
+    const handleDragLeave = (e) => {
+      if (!el.contains(e.relatedTarget)) {
+        setDragSide(null)
+        targetId = null
+      }
+    }
+
+    const handleDrop = (e) => {
+      e.preventDefault()
+      setDragSide(null)
+      const id = targetId || e.dataTransfer.getData('text/plain')
+      targetId = null
+      if (!id) return
+      const rect = el.getBoundingClientRect()
+      const sidebarLeft = 200
+      const sidebarRight = rect.width - 200
+      if (e.clientX - rect.left < sidebarLeft || e.clientX - rect.left > sidebarRight) return
+      const midX = rect.left + rect.width / 2
+      if (e.clientX < midX) {
+        handleDropLeft(id)
+      } else {
+        handleDropRight(id)
+      }
+    }
+
+    document.addEventListener('dragstart', handleDragStart)
+    el.addEventListener('dragover', handleDragOver)
+    el.addEventListener('dragleave', handleDragLeave)
+    el.addEventListener('drop', handleDrop)
+
+    return () => {
+      document.removeEventListener('dragstart', handleDragStart)
+      el.removeEventListener('dragover', handleDragOver)
+      el.removeEventListener('dragleave', handleDragLeave)
+      el.removeEventListener('drop', handleDrop)
+    }
+  }, [handleDropLeft, handleDropRight])
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Header />
-      <div className="flex h-[calc(100vh-56px)]">
+      <div ref={rowRef} className={'flex h-[calc(100vh-56px)] ' + (dragSide ? 'bg-black/[0.02]' : '')}>
         <aside className="w-[200px] flex-shrink-0 h-full bg-white border-r-[3px] border-[--color-ink] overflow-y-auto">
           <div className="border-b-[2px] border-[--color-ink] px-3 py-2.5">
             <p className="font-mono text-[10px] uppercase tracking-wider text-[--color-ink-muted]">Drag a character</p>
@@ -34,6 +99,7 @@ function DebatePage() {
             <div
               key={character.id}
               draggable
+              data-char-id={character.id}
               onDragStart={(e) => handleDragStart(e, character.id)}
               className="border-b-[2px] border-[--color-ink] cursor-grab active:cursor-grabbing hover:bg-black/[0.02] transition-colors duration-100"
             >
@@ -54,8 +120,7 @@ function DebatePage() {
         <DebateInterface
           leftCharacter={leftCharacter}
           rightCharacter={rightCharacter}
-          onDropLeft={handleDropLeft}
-          onDropRight={handleDropRight}
+          dragSide={dragSide}
           onClearLeft={() => setLeftCharacter(null)}
           onClearRight={() => setRightCharacter(null)}
         />
@@ -68,6 +133,7 @@ function DebatePage() {
             <div
               key={character.id}
               draggable
+              data-char-id={character.id}
               onDragStart={(e) => handleDragStart(e, character.id)}
               className="border-b-[2px] border-[--color-ink] cursor-grab active:cursor-grabbing hover:bg-black/[0.02] transition-colors duration-100"
             >
