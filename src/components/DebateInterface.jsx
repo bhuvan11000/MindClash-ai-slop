@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 
-const DEBATE_ROUNDS = 4
+const DEBATE_ROUNDS = 3
 
 function buildMessages(topic, debateHistory, speakingChar, otherChar) {
   const msgs = [

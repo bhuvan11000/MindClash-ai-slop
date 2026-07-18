@@ -8,20 +8,20 @@ function DebatePage() {
   const [rightCharacter, setRightCharacter] = useState(null)
 
   const handleDragStart = useCallback((e, characterId) => {
-    e.dataTransfer.setData('characterId', characterId)
+    e.dataTransfer.setData('text/plain', characterId)
     e.dataTransfer.effectAllowed = 'copy'
   }, [])
 
   const handleDropLeft = useCallback((e) => {
     e.preventDefault()
-    const id = e.dataTransfer.getData('characterId')
+    const id = e.dataTransfer.getData('text/plain')
     const char = characters.find(c => c.id === id)
     if (char && char.id !== rightCharacter?.id) setLeftCharacter(char)
   }, [rightCharacter])
 
   const handleDropRight = useCallback((e) => {
     e.preventDefault()
-    const id = e.dataTransfer.getData('characterId')
+    const id = e.dataTransfer.getData('text/plain')
     const char = characters.find(c => c.id === id)
     if (char && char.id !== leftCharacter?.id) setRightCharacter(char)
   }, [leftCharacter])
