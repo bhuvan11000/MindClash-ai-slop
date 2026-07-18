@@ -178,7 +178,7 @@ function ChatInterface({ character }) {
       <div
         className="flex-1 overflow-y-auto p-8 flex flex-col relative noise-overlay"
         style={{
-          background: character.theme.ambientGlow,
+          background: `color-mix(in srgb, ${character.theme.cardColor} 15%, #ffffff)`,
         }}
       >
         {currentMessages.length === 0 && !error ? (
