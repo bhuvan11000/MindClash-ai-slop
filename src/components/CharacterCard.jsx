@@ -26,12 +26,7 @@ function CharacterCard({ character }) {
           className="absolute inset-0"
           style={{ background: character.theme.cardColor }}
         />
-        <div className="absolute top-4 right-4">
-          <div className="w-12 h-12 bg-black/40 border-[2px] border-[--color-ink] flex items-center justify-center">
-            <span className="text-white font-bold text-sm">{character.avatarInitials}</span>
-          </div>
-        </div>
-        <div className="absolute bottom-0 left-0 p-5">
+        <div className="absolute top-0 left-0 p-5">
           <h3 className="font-heading text-xl text-white">{character.name}</h3>
           <p className="font-mono text-[10px] uppercase tracking-wider text-white/70 mt-0.5">
             {character.category} · {character.subcategory}
