@@ -103,10 +103,6 @@ function DebateInterface({ leftCharacter, rightCharacter, onClearLeft, onClearRi
         <div
           className="flex-1 flex flex-col border-r-[3px] border-[--color-ink] overflow-hidden transition-colors duration-150"
           style={leftCharacter ? { background: 'color-mix(in srgb, ' + leftCharacter.theme.cardColor + ' 8%, #ffffff)' } : {}}
-          onDragOver={onDragOver}
-          onDrop={onDropLeft}
-          onDragEnter={onDragEnterLeft}
-          onDragLeave={onDragLeave}
         >
           {leftCharacter ? (
             <>
