@@ -16,7 +16,7 @@ function buildMessages(topic, debateHistory, speakingChar, otherChar) {
   return msgs
 }
 
-function DebateInterface({ leftCharacter, rightCharacter, dragSide, onClearLeft, onClearRight }) {
+function DebateInterface({ leftCharacter, rightCharacter, dragSide, onClearLeft, onClearRight, onDragOver, onDropLeft, onDropRight, onDragEnterLeft, onDragEnterRight, onDragLeave }) {
   const [topic, setTopic] = useState('')
   const [debateHistory, setDebateHistory] = useState([])
   const [isDebating, setIsDebating] = useState(false)
@@ -103,6 +103,10 @@ function DebateInterface({ leftCharacter, rightCharacter, dragSide, onClearLeft,
         <div
           className={'flex-1 flex flex-col border-r-[3px] border-[--color-ink] overflow-hidden transition-colors duration-150 ' + (dragSide === 'left' ? 'bg-black/[0.04]' : '')}
           style={leftCharacter ? { background: 'color-mix(in srgb, ' + leftCharacter.theme.cardColor + ' 8%, #ffffff)' } : {}}
+          onDragOver={onDragOver}
+          onDrop={onDropLeft}
+          onDragEnter={onDragEnterLeft}
+          onDragLeave={onDragLeave}
         >
           {leftCharacter ? (
             <>
@@ -154,6 +158,10 @@ function DebateInterface({ leftCharacter, rightCharacter, dragSide, onClearLeft,
         <div
           className={'flex-1 flex flex-col overflow-hidden transition-colors duration-150 ' + (dragSide === 'right' ? 'bg-black/[0.04]' : '')}
           style={rightCharacter ? { background: 'color-mix(in srgb, ' + rightCharacter.theme.cardColor + ' 8%, #ffffff)' } : {}}
+          onDragOver={onDragOver}
+          onDrop={onDropRight}
+          onDragEnter={onDragEnterRight}
+          onDragLeave={onDragLeave}
         >
           {rightCharacter ? (
             <>
