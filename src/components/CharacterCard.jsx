@@ -35,7 +35,7 @@ function CharacterCard({ character }) {
             {character.tagline}
           </p>
         </div>
-        <div className="absolute bottom-0 right-0 w-24 h-24 animate-fade-in-scale border-[3px] border-[--color-ink]"
+        <div className="absolute bottom-0 right-0 w-24 h-24 animate-fade-in-scale"
           style={{ animationDelay: '0.15s' }}>
           <img
             src={`/avatars/${character.id}.webp`}
