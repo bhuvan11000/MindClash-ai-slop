@@ -21,7 +21,7 @@ function HomePage() {
         </div>
       </div>
 
-      <section className="relative z-20 bg-white pt-44 pb-28 text-center">
+      <section className="relative z-20 bg-white pt-12 pb-8 text-center">
         <div className="inline-block bg-white border-[4px] border-[--color-ink] px-14 py-7 shadow-[--shadow-lg]">
           <h1 className="font-heading text-8xl text-[--color-ink] leading-none">
             MindClash

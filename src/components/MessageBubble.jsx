@@ -3,7 +3,7 @@ function MessageBubble({ message, character, isNew, showAvatar = true }) {
 
   return (
     <div
-      className={`flex gap-2.5 max-w-[70%] ${isNew ? 'animate-message-in' : ''} ${isUser ? 'flex-row-reverse self-end' : 'flex-row self-start'}`}
+      className={`flex gap-2.5 max-w-[70%] ${isNew ? 'animate-message-in' : ''} ${isUser ? 'flex-row-reverse ml-auto' : 'flex-row mr-auto'}`}
     >
       {showAvatar ? (
         isUser ? (
