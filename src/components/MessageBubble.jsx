@@ -12,7 +12,7 @@ function MessageBubble({ message, character, isNew, showAvatar = true }) {
           </div>
         ) : (
           <div className="w-7 h-7 flex-shrink-0 border-[2px] border-[--color-ink] overflow-hidden" style={{ background: character.theme.cardColor }}>
-            <img src={`/avatars/${character.id}.webp`} alt={character.name} className="w-full h-full object-cover" />
+            <img src={`/avatars/${character.id}.png`} alt={character.name} className="w-full h-full object-cover" />
           </div>
         )
       ) : (

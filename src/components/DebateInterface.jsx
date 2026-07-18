@@ -110,7 +110,7 @@ function DebateInterface({ leftCharacter, rightCharacter, dragSide, onClearLeft,
                 <div className="w-10 h-10 flex-shrink-0 border-[2px] border-[--color-ink] overflow-hidden"
                   style={{ background: leftCharacter.theme.cardColor }}
                 >
-                  <img src={"/avatars/" + leftCharacter.id + ".webp"} alt={leftCharacter.name} className="w-full h-full object-cover" />
+                  <img src={"/avatars/" + leftCharacter.id + ".png"} alt={leftCharacter.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-heading text-lg text-[--color-ink]">{leftCharacter.name}</p>
@@ -165,7 +165,7 @@ function DebateInterface({ leftCharacter, rightCharacter, dragSide, onClearLeft,
                 <div className="w-10 h-10 flex-shrink-0 border-[2px] border-[--color-ink] overflow-hidden"
                   style={{ background: rightCharacter.theme.cardColor }}
                 >
-                  <img src={"/avatars/" + rightCharacter.id + ".webp"} alt={rightCharacter.name} className="w-full h-full object-cover" />
+                  <img src={"/avatars/" + rightCharacter.id + ".png"} alt={rightCharacter.name} className="w-full h-full object-cover" />
                 </div>
               </div>
               <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 items-end">

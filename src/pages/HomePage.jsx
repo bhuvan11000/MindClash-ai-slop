@@ -11,7 +11,7 @@ function HomePage() {
         <div className="max-w-[1200px] mx-auto bg-white border-[3px] border-[--color-ink] shadow-[--shadow-md] h-16 flex items-center px-5">
           <div className="w-full flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3">
-              <img src="/avatars/luffy.webp" alt="MindClash" className="w-8 h-8" />
+              <img src="/avatars/luffy.png" alt="MindClash" className="w-8 h-8" />
               <span className="font-pixel text-base text-[--color-ink] tracking-wide">MindClash</span>
             </Link>
             <nav className="flex items-center gap-5">

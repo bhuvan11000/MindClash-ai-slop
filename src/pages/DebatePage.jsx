@@ -8,10 +8,12 @@ function DebatePage() {
   const [rightCharacter, setRightCharacter] = useState(null)
   const [dragSide, setDragSide] = useState(null)
   const rowRef = useRef(null)
+  const dragIdRef = useRef(null)
 
   const handleDragStart = useCallback((e, characterId) => {
     e.dataTransfer.setData('text/plain', characterId)
     e.dataTransfer.effectAllowed = 'copy'
+    dragIdRef.current = characterId
   }, [])
 
   const handleDropLeft = useCallback((id) => {
@@ -28,23 +30,34 @@ function DebatePage() {
     const el = rowRef.current
     if (!el) return
 
-    let targetId = null
+    const getSidebarWidths = () => {
+      const leftSidebar = el.querySelector('aside:first-child')
+      const rightSidebar = el.querySelector('aside:last-child')
+      return {
+        left: leftSidebar ? leftSidebar.getBoundingClientRect().width : 200,
+        right: rightSidebar ? rightSidebar.getBoundingClientRect().width : 200
+      }
+    }
 
-    const handleDragStart = (e) => {
-      targetId = e.target.closest('[data-char-id]')?.getAttribute('data-char-id')
+    const handleDocDragStart = (e) => {
+      const charEl = e.target.closest?.('[data-char-id]')
+      if (charEl) {
+        dragIdRef.current = charEl.getAttribute('data-char-id')
+      }
     }
 
     const handleDragOver = (e) => {
+      const id = dragIdRef.current || e.dataTransfer.types.includes('text/plain')
+      if (!id) return
       e.preventDefault()
-      if (!targetId) return
       e.dataTransfer.dropEffect = 'copy'
       const rect = el.getBoundingClientRect()
-      const midX = rect.left + rect.width / 2
-      const sidebarLeft = 200
-      const sidebarRight = rect.width - 200
-      if (e.clientX - rect.left < sidebarLeft || e.clientX - rect.left > sidebarRight) {
+      const sidebars = getSidebarWidths()
+      const localX = e.clientX - rect.left
+      if (localX < sidebars.left || localX > rect.width - sidebars.right) {
         setDragSide(null)
       } else {
+        const midX = rect.left + rect.width / 2
         setDragSide(e.clientX < midX ? 'left' : 'right')
       }
     }
@@ -52,20 +65,24 @@ function DebatePage() {
     const handleDragLeave = (e) => {
       if (!el.contains(e.relatedTarget)) {
         setDragSide(null)
-        targetId = null
       }
+    }
+
+    const handleDragEnd = () => {
+      setDragSide(null)
+      dragIdRef.current = null
     }
 
     const handleDrop = (e) => {
       e.preventDefault()
       setDragSide(null)
-      const id = targetId || e.dataTransfer.getData('text/plain')
-      targetId = null
+      const id = dragIdRef.current || e.dataTransfer.getData('text/plain')
+      dragIdRef.current = null
       if (!id) return
       const rect = el.getBoundingClientRect()
-      const sidebarLeft = 200
-      const sidebarRight = rect.width - 200
-      if (e.clientX - rect.left < sidebarLeft || e.clientX - rect.left > sidebarRight) return
+      const sidebars = getSidebarWidths()
+      const localX = e.clientX - rect.left
+      if (localX < sidebars.left || localX > rect.width - sidebars.right) return
       const midX = rect.left + rect.width / 2
       if (e.clientX < midX) {
         handleDropLeft(id)
@@ -74,13 +91,15 @@ function DebatePage() {
       }
     }
 
-    document.addEventListener('dragstart', handleDragStart)
+    document.addEventListener('dragstart', handleDocDragStart)
+    document.addEventListener('dragend', handleDragEnd)
     el.addEventListener('dragover', handleDragOver)
     el.addEventListener('dragleave', handleDragLeave)
     el.addEventListener('drop', handleDrop)
 
     return () => {
-      document.removeEventListener('dragstart', handleDragStart)
+      document.removeEventListener('dragstart', handleDocDragStart)
+      document.removeEventListener('dragend', handleDragEnd)
       el.removeEventListener('dragover', handleDragOver)
       el.removeEventListener('dragleave', handleDragLeave)
       el.removeEventListener('drop', handleDrop)
@@ -107,7 +126,7 @@ function DebatePage() {
                 <div className="w-8 h-8 flex-shrink-0 border-[2px] border-[--color-ink] overflow-hidden"
                   style={{ background: character.theme.cardColor }}
                 >
-                  <img src={"/avatars/" + character.id + ".webp"} alt={character.name} draggable="false" className="w-full h-full object-cover select-none" />
+                  <img src={"/avatars/" + character.id + ".png"} alt={character.name} draggable="false" className="w-full h-full object-cover select-none" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-mono text-[11px] uppercase tracking-wider text-[--color-ink] font-semibold truncate">{character.name}</p>
@@ -141,7 +160,7 @@ function DebatePage() {
                 <div className="w-8 h-8 flex-shrink-0 border-[2px] border-[--color-ink] overflow-hidden"
                   style={{ background: character.theme.cardColor }}
                 >
-                  <img src={"/avatars/" + character.id + ".webp"} alt={character.name} draggable="false" className="w-full h-full object-cover select-none" />
+                  <img src={"/avatars/" + character.id + ".png"} alt={character.name} draggable="false" className="w-full h-full object-cover select-none" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-mono text-[11px] uppercase tracking-wider text-[--color-ink] font-semibold truncate">{character.name}</p>

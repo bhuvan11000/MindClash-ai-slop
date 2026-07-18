@@ -38,7 +38,7 @@ function CharacterCard({ character }) {
         <div className="absolute bottom-0 right-0 w-24 h-24 animate-fade-in-scale"
           style={{ animationDelay: '0.15s' }}>
           <img
-            src={`/avatars/${character.id}.webp`}
+            src={`/avatars/${character.id}.png`}
             alt={character.name}
             className="w-full h-full object-cover"
           />
