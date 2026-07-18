@@ -26,11 +26,8 @@ function ChatSidebar({ characters, selectedId, onSelect }) {
               onClick={() => onSelect(character.id)}
             >
               <div className="flex items-center gap-3 py-3 px-4">
-                <div
-                  className="w-10 h-10 flex-shrink-0 flex items-center justify-center border-[2px] border-[--color-ink]"
-                  style={{ background: character.theme.cardColor }}
-                >
-                  <span className="text-white text-[13px] font-bold">{character.avatarInitials}</span>
+                <div className="w-10 h-10 flex-shrink-0 border-[2px] border-[--color-ink] overflow-hidden">
+                  <img src={`/avatars/${character.id}.webp`} alt={character.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-mono text-xs uppercase tracking-wider text-[--color-ink] font-semibold truncate">{character.name}</p>

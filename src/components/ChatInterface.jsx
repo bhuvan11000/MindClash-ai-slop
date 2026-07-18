@@ -146,14 +146,10 @@ function ChatInterface({ character }) {
     <div className="flex-1 h-full flex flex-col overflow-hidden bg-white border-[3px] border-[--color-ink] shadow-[--shadow-sm]">
       <div className="flex-shrink-0 bg-white border-b-[3px] border-[--color-ink]">
         <div className="flex items-center px-6 py-4 gap-4">
-          <div
-            className="w-14 h-14 flex items-center justify-center flex-shrink-0 border-[3px] border-[--color-ink] shadow-[--shadow-sm]"
-            style={{
-              background: character.theme.cardColor,
-              boxShadow: `3px 3px 0 var(--color-ink)`,
-            }}
+          <div className="w-14 h-14 flex-shrink-0 border-[3px] border-[--color-ink] shadow-[--shadow-sm] overflow-hidden"
+            style={{ boxShadow: `3px 3px 0 var(--color-ink)` }}
           >
-            <span className="text-white text-lg font-bold">{character.avatarInitials}</span>
+            <img src={`/avatars/${character.id}.webp`} alt={character.name} className="w-full h-full object-cover" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2.5">
@@ -183,14 +179,10 @@ function ChatInterface({ character }) {
       >
         {currentMessages.length === 0 && !error ? (
           <div className="flex-1 flex flex-col items-center justify-center">
-            <div
-              className="w-20 h-20 flex items-center justify-center border-[3px] border-[--color-ink] shadow-[--shadow-sm]"
-              style={{
-                background: character.theme.cardColor,
-                boxShadow: `5px 5px 0 var(--color-ink)`,
-              }}
+            <div className="w-20 h-20 border-[3px] border-[--color-ink] shadow-[--shadow-sm] overflow-hidden"
+              style={{ boxShadow: `5px 5px 0 var(--color-ink)` }}
             >
-              <span className="text-white text-2xl font-bold">{character.avatarInitials}</span>
+              <img src={`/avatars/${character.id}.webp`} alt={character.name} className="w-full h-full object-cover" />
             </div>
             <p className="font-mono text-xs uppercase tracking-wider text-[--color-ink-muted] mt-5 max-w-sm text-center">
               "{character.tagline}"
@@ -234,11 +226,8 @@ function ChatInterface({ character }) {
             )}
             {isLoading && (
               <div className="self-start inline-flex bg-white border-[3px] border-[--color-ink] shadow-[--shadow-sm] px-4 py-2 items-center gap-2.5 mt-2">
-                <div
-                  className="w-7 h-7 flex items-center justify-center flex-shrink-0 border-[2px] border-[--color-ink]"
-                  style={{ background: character.theme.cardColor }}
-                >
-                  <span className="text-white text-[11px] font-bold">{character.avatarInitials}</span>
+                <div className="w-7 h-7 flex-shrink-0 border-[2px] border-[--color-ink] overflow-hidden">
+                  <img src={`/avatars/${character.id}.webp`} alt={character.name} className="w-full h-full object-cover" />
                 </div>
                 <p className="font-mono text-[10px] uppercase tracking-wider text-[--color-ink-muted]">
                   {TYPING_TEXTS[character.id] || `${character.name} is typing...`}

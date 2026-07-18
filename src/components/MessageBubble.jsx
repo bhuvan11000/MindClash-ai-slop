@@ -11,11 +11,8 @@ function MessageBubble({ message, character, isNew, showAvatar = true }) {
             <span className="font-mono text-[9px] text-[--color-ink] font-semibold">U</span>
           </div>
         ) : (
-          <div
-            className="w-7 h-7 flex items-center justify-center flex-shrink-0 border-[2px] border-[--color-ink]"
-            style={{ background: character.theme.cardColor }}
-          >
-            <span className="text-white font-mono text-[9px] font-bold">{character.avatarInitials}</span>
+          <div className="w-7 h-7 flex-shrink-0 border-[2px] border-[--color-ink] overflow-hidden">
+            <img src={`/avatars/${character.id}.webp`} alt={character.name} className="w-full h-full object-cover" />
           </div>
         )
       ) : (
