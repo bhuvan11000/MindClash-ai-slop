@@ -66,12 +66,20 @@ function HomePage() {
         </section>
 
         <section className="text-center py-12">
-          <Link
-            to="/chat"
-            className="inline-block bg-[--color-ink] text-white px-10 py-4 text-lg font-semibold border-[3px] border-[--color-ink] shadow-[--shadow-md] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[--shadow-lg] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all duration-100"
-          >
-            Start Chatting →
-          </Link>
+          <div className="flex items-center justify-center gap-4">
+            <Link
+              to="/chat"
+              className="inline-block bg-[--color-ink] text-white px-10 py-4 text-lg font-semibold border-[3px] border-[--color-ink] shadow-[--shadow-md] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[--shadow-lg] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all duration-100"
+            >
+              Start Chatting →
+            </Link>
+            <Link
+              to="/debate"
+              className="inline-block bg-white text-[--color-ink] px-10 py-4 text-lg font-semibold border-[3px] border-[--color-ink] shadow-[--shadow-md] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[--shadow-lg] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all duration-100"
+            >
+              Debate →
+            </Link>
+          </div>
         </section>
       </main>
     </div>
