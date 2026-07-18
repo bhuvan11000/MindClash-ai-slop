@@ -12,7 +12,7 @@ function HomePage() {
           <div className="w-full flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3">
               <img src="/avatars/luffy.webp" alt="MindClash" className="w-8 h-8" />
-              <span className="font-heading text-xl text-[--color-ink]">MindClash</span>
+              <span className="font-pixel text-sm text-[--color-ink] tracking-wide">MindClash</span>
             </Link>
             <Link
               to="/chat"
@@ -28,7 +28,7 @@ function HomePage() {
         <Shuffle
           text="MindClash"
           tag="h1"
-          className="font-heading text-8xl text-[--color-ink] leading-none"
+          className="font-pixel text-4xl text-[--color-ink] leading-relaxed"
           style={{ textShadow: '2px 2px 0 var(--color-ink)' }}
           shuffleDirection="right"
           duration={0.35}

@@ -6,7 +6,7 @@ function Header({ fullWidth }) {
       <div className="w-full mx-auto flex items-center justify-between max-w-[1200px]">
         <Link to="/" className="flex items-center gap-2.5">
           <img src="/avatars/luffy.webp" alt="MindClash" className="w-6 h-6" />
-          <span className="font-heading text-lg text-[--color-ink]">MindClash</span>
+          <span className="font-pixel text-xs text-[--color-ink] tracking-wide">MindClash</span>
         </Link>
         <Link
           to="/chat"
