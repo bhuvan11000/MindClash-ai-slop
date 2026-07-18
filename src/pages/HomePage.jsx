@@ -24,7 +24,7 @@ function HomePage() {
       </div>
 
       <section className="relative z-20 pt-10 pb-6 text-center">
-        <h1 className="font-heading text-8xl text-[--color-ink] leading-none" style={{ textShadow: '6px 6px 0 var(--color-ink)' }}>
+        <h1 className="font-heading text-8xl text-[--color-ink] leading-none" style={{ textShadow: '2px 2px 0 var(--color-ink)' }}>
           MindClash
         </h1>
       </section>
