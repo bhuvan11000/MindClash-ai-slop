@@ -23,12 +23,10 @@ function HomePage() {
         </div>
       </div>
 
-      <section className="relative z-20 bg-white pt-12 pb-8 text-center">
-        <div className="inline-block bg-white border-[4px] border-[--color-ink] px-14 py-7 shadow-[--shadow-lg]">
-          <h1 className="font-heading text-8xl text-[--color-ink] leading-none">
-            MindClash
-          </h1>
-        </div>
+      <section className="relative z-20 pt-10 pb-6 text-center">
+        <h1 className="font-heading text-8xl text-[--color-ink] leading-none" style={{ textShadow: '6px 6px 0 var(--color-ink)' }}>
+          MindClash
+        </h1>
       </section>
 
       <div className="fixed inset-0 z-0 pointer-events-none">
