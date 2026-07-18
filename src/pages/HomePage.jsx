@@ -1,37 +1,48 @@
 import { Link } from 'react-router-dom'
-import Header from '../components/Header'
 import CharacterCard from '../components/CharacterCard'
-import LightRays from '../components/LightRays'
+import PixelSnow from '../components/PixelSnow'
 import characters from '../data/characters.json'
 
 function HomePage() {
   return (
-    <div className="relative min-h-screen bg-[#08080c]">
-      <div className="fixed inset-0 z-0">
-        <LightRays
-          raysOrigin="top-center"
-          raysColor="#ffffff"
-          raysSpeed={1.0}
-          lightSpread={0.9}
-          rayLength={2.0}
-          followMouse={true}
-          mouseInfluence={0.25}
-          noiseAmount={0.08}
-          distortion={0.04}
-        />
+    <div className="relative min-h-screen bg-white">
+      <div className="bg-white border-b-[3px] border-[--color-ink] h-16 flex items-center px-5">
+        <div className="w-full mx-auto flex items-center justify-between max-w-[1200px]">
+          <Link to="/" className="flex items-center gap-3">
+            <img src="/avatars/luffy.webp" alt="MindClash" className="w-8 h-8" />
+            <span className="font-heading text-xl text-[--color-ink]">MindClash</span>
+          </Link>
+          <Link
+            to="/chat"
+            className="bg-[--color-ink] text-white px-5 py-1.5 text-sm font-semibold border-[3px] border-[--color-ink] shadow-[--shadow-sm] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[--shadow-md] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all duration-100"
+          >
+            Start Chatting
+          </Link>
+        </div>
       </div>
-      <div className="relative z-10">
-        <Header />
 
-      <main className="max-w-[1200px] mx-auto px-6">
-        <section className="pt-20 pb-12 text-center">
-
-          <h1 className="font-heading font-extrabold text-6xl animate-shimmer">
+      <section className="relative z-20 bg-white pt-44 pb-28 text-center">
+        <div className="inline-block bg-white border-[4px] border-[--color-ink] px-14 py-7 shadow-[--shadow-lg]">
+          <h1 className="font-heading text-8xl text-[--color-ink] leading-none">
             MindClash
           </h1>
-        </section>
+        </div>
+      </section>
 
-        <section className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-6 pt-6">
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <PixelSnow
+          color="#1c1c1a"
+          flakeSize={0.01}
+          pixelResolution={300}
+          speed={0.6}
+          density={0.06}
+          direction={135}
+          brightness={0.3}
+        />
+      </div>
+
+      <main className="relative z-10 max-w-[1200px] mx-auto px-6">
+        <section className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-6">
           {characters.map((character, i) => (
             <div
               key={character.id}
@@ -46,13 +57,12 @@ function HomePage() {
         <section className="text-center py-12">
           <Link
             to="/chat"
-            className="inline-block bg-white text-[#08080c] px-10 py-4 rounded-full text-lg font-semibold hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] transition-all duration-300"
+            className="inline-block bg-[--color-ink] text-white px-10 py-4 text-lg font-semibold border-[3px] border-[--color-ink] shadow-[--shadow-md] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[--shadow-lg] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all duration-100"
           >
             Start Chatting →
           </Link>
         </section>
       </main>
-      </div>
     </div>
   )
 }

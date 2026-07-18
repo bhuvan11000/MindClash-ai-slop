@@ -114,13 +114,13 @@ function ChatInterface({ character }) {
   const handleInputFocus = () => {
     const el = inputWrapperRef.current
     if (!el) return
-    el.style.boxShadow = `0 0 0 2px ${character.theme.accentColor}4d, 0 4px 20px ${character.theme.accentColor}1a`
+    el.style.boxShadow = `3px 3px 0 ${character.theme.accentColor}`
   }
 
   const handleInputBlur = () => {
     const el = inputWrapperRef.current
     if (!el) return
-    el.style.boxShadow = 'none'
+    el.style.boxShadow = '3px 3px 0 var(--color-ink)'
   }
 
   const starters = character ? CONVERSATION_STARTERS[character.id] || [] : []
@@ -134,39 +134,43 @@ function ChatInterface({ character }) {
 
   if (!character) {
     return (
-      <div className="flex-1 h-full flex flex-col rounded-2xl overflow-hidden shadow-lg shadow-black/20 bg-[#0a0a10]">
+      <div className="flex-1 h-full flex flex-col overflow-hidden bg-white border-[3px] border-[--color-ink] shadow-[--shadow-sm]">
         <div className="flex-1 flex items-center justify-center">
-          <p className="text-[#606070] text-sm">Select a character to start chatting</p>
+          <p className="font-mono text-xs uppercase tracking-wider text-[--color-ink-muted]">Select a character to start chatting</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="flex-1 h-full flex flex-col rounded-2xl overflow-hidden shadow-lg shadow-black/20 bg-[#0a0a10]">
-      <div className="flex-shrink-0 bg-[#0f0f14] shadow-sm z-10">
-        <div className="flex items-center px-6 py-5 gap-4">
+    <div className="flex-1 h-full flex flex-col overflow-hidden bg-white border-[3px] border-[--color-ink] shadow-[--shadow-sm]">
+      <div className="flex-shrink-0 bg-white border-b-[3px] border-[--color-ink]">
+        <div className="flex items-center px-6 py-4 gap-4">
           <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg"
-            style={{ background: character.theme.cardColor }}
+            className="w-14 h-14 flex items-center justify-center flex-shrink-0 border-[3px] border-[--color-ink] shadow-[--shadow-sm]"
+            style={{
+              background: character.theme.cardColor,
+              boxShadow: `3px 3px 0 var(--color-ink)`,
+            }}
           >
             <span className="text-white text-lg font-bold">{character.avatarInitials}</span>
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2.5">
-              <p className="font-heading font-semibold text-lg text-white">{character.name}</p>
+              <p className="font-heading text-xl text-[--color-ink]">{character.name}</p>
               <span
-                className="text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full"
+                className="font-mono text-[9px] uppercase tracking-wider px-2 py-1 border-[2px] border-[--color-ink]"
                 style={{
                   background: character.theme.accentColorMuted,
                   color: character.theme.accentColor,
+                  borderColor: character.theme.accentColor,
                 }}
               >
                 {character.category}
               </span>
-              <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse-dot" />
+              <div className="w-3 h-3 animate-pulse-dot" style={{ background: 'var(--color-success)' }} />
             </div>
-            <p className="text-[13px] text-[#707080] mt-0.5 truncate">{character.tagline}</p>
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[--color-ink-muted] mt-0.5 truncate">{character.tagline}</p>
           </div>
         </div>
       </div>
@@ -174,19 +178,21 @@ function ChatInterface({ character }) {
       <div
         className="flex-1 overflow-y-auto p-8 flex flex-col relative noise-overlay"
         style={{
-          background: `${character.theme.ambientGlow}, #0a0a10`,
-          transition: 'background 600ms ease',
+          background: character.theme.ambientGlow,
         }}
       >
         {currentMessages.length === 0 && !error ? (
           <div className="flex-1 flex flex-col items-center justify-center">
             <div
-              className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg"
-              style={{ background: character.theme.cardColor }}
+              className="w-20 h-20 flex items-center justify-center border-[3px] border-[--color-ink] shadow-[--shadow-sm]"
+              style={{
+                background: character.theme.cardColor,
+                boxShadow: `5px 5px 0 var(--color-ink)`,
+              }}
             >
               <span className="text-white text-2xl font-bold">{character.avatarInitials}</span>
             </div>
-            <p className="text-[#808090] text-[15px] mt-5 italic max-w-sm text-center">
+            <p className="font-mono text-xs uppercase tracking-wider text-[--color-ink-muted] mt-5 max-w-sm text-center">
               "{character.tagline}"
             </p>
             {starters.length > 0 && (
@@ -195,7 +201,7 @@ function ChatInterface({ character }) {
                   <button
                     key={starter}
                     onClick={() => handleSubmit(starter)}
-                    className="px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.06] text-sm text-[#a0a0b0] hover:bg-white/[0.08] hover:text-white transition-all cursor-pointer"
+                    className="font-mono text-[10px] uppercase tracking-wider px-4 py-2 bg-white border-[3px] border-[--color-ink] text-[--color-ink-muted] shadow-[--shadow-sm] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[--shadow-md] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all duration-100 cursor-pointer"
                   >
                     {starter}
                   </button>
@@ -216,31 +222,31 @@ function ChatInterface({ character }) {
               </div>
             ))}
             {error && (
-              <div className="self-center max-w-md w-full bg-red-500/10 border border-red-500/20 rounded-2xl px-4 py-3 text-center mt-4">
-                <p className="text-red-400 text-sm">Something went wrong. Please try again.</p>
+              <div className="self-center max-w-md w-full bg-[#FF3B30]/10 border-[3px] border-[#FF3B30] px-4 py-3 text-center mt-4">
+                <p className="font-mono text-xs uppercase tracking-wider text-[#FF3B30]">Something went wrong. Please try again.</p>
                 <button
                   onClick={() => sendMessage()}
-                  className="text-red-400 underline text-xs cursor-pointer mt-1 hover:text-red-300 transition-colors"
+                  className="font-mono text-[10px] uppercase tracking-wider text-[#FF3B30] underline cursor-pointer mt-1"
                 >
                   Retry
                 </button>
               </div>
             )}
             {isLoading && (
-              <div className="self-start inline-flex bg-[#141418]/60 rounded-xl px-4 py-2 items-center gap-2.5 mt-2">
+              <div className="self-start inline-flex bg-white border-[3px] border-[--color-ink] shadow-[--shadow-sm] px-4 py-2 items-center gap-2.5 mt-2">
                 <div
-                  className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+                  className="w-7 h-7 flex items-center justify-center flex-shrink-0 border-[2px] border-[--color-ink]"
                   style={{ background: character.theme.cardColor }}
                 >
                   <span className="text-white text-[11px] font-bold">{character.avatarInitials}</span>
                 </div>
-                <p className="italic text-[13px] text-[#606070]">
+                <p className="font-mono text-[10px] uppercase tracking-wider text-[--color-ink-muted]">
                   {TYPING_TEXTS[character.id] || `${character.name} is typing...`}
                 </p>
                 <span className="flex gap-[3px] items-center">
-                  <span className="w-1 h-1 rounded-full bg-[#606070] animate-bounce-dot" style={{ animationDelay: '0s' }} />
-                  <span className="w-1 h-1 rounded-full bg-[#606070] animate-bounce-dot" style={{ animationDelay: '0.15s' }} />
-                  <span className="w-1 h-1 rounded-full bg-[#606070] animate-bounce-dot" style={{ animationDelay: '0.3s' }} />
+                  <span className="w-2 h-2 animate-bounce-dot" style={{ background: character.theme.accentColor, animationDelay: '0s' }} />
+                  <span className="w-2 h-2 animate-bounce-dot" style={{ background: character.theme.accentColor, animationDelay: '0.15s' }} />
+                  <span className="w-2 h-2 animate-bounce-dot" style={{ background: character.theme.accentColor, animationDelay: '0.3s' }} />
                 </span>
               </div>
             )}
@@ -249,10 +255,11 @@ function ChatInterface({ character }) {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="flex-shrink-0 bg-[#0e0e14] shadow-[0_-2px_10px_rgba(0,0,0,0.2)] p-4 px-6">
+      <div className="flex-shrink-0 bg-white border-t-[3px] border-[--color-ink] p-4 px-6">
         <div
           ref={inputWrapperRef}
-          className="flex items-center gap-3 bg-white/[0.06] border border-white/[0.08] rounded-2xl pl-5 pr-2 py-3 transition-all duration-200"
+          className="flex items-center gap-3 bg-white border-[3px] border-[--color-ink] pl-5 pr-2 py-3 transition-all duration-100"
+          style={{ boxShadow: '3px 3px 0 var(--color-ink)' }}
         >
           <input
             type="text"
@@ -262,19 +269,13 @@ function ChatInterface({ character }) {
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
             placeholder={`Message ${character.name}...`}
-            className="flex-1 bg-transparent border-none outline-none text-[#f0f0f2] text-sm placeholder-[#606070]"
+            className="flex-1 bg-transparent border-none outline-none text-[--color-ink] text-sm placeholder-[--color-ink-muted]"
             disabled={isLoading}
           />
           <button
             onClick={() => handleSubmit()}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = `0 0 12px ${character.theme.accentColor}66`
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = 'none'
-            }}
             disabled={isLoading || !inputValue.trim()}
-            className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-lg flex-shrink-0 transition-all duration-150 disabled:opacity-30 disabled:hover:scale-100 enabled:hover:scale-105"
+            className="w-10 h-10 flex items-center justify-center text-white text-lg flex-shrink-0 border-[3px] border-[--color-ink] shadow-[--shadow-sm] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[--shadow-md] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all duration-100 disabled:opacity-30 disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[--shadow-sm]"
             style={{ background: character.theme.accentColor }}
           >
             ↑

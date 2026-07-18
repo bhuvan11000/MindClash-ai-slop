@@ -12,9 +12,9 @@ function ChatPage() {
   const selectedCharacter = characters.find((c) => c.id === selectedCharacterId) || null
 
   return (
-    <div className="min-h-screen bg-[#08080c] flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col">
       <Header fullWidth />
-      <div className="flex h-[calc(100vh-64px)] p-3 gap-3">
+      <div className="flex h-[calc(100vh-56px)]">
         <ChatSidebar
           characters={characters}
           selectedId={selectedCharacterId}

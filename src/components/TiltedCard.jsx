@@ -3,8 +3,8 @@ import { motion, useMotionValue, useSpring } from 'motion/react';
 import './TiltedCard.css';
 
 const springValues = {
-  damping: 15,
-  stiffness: 250,
+  damping: 20,
+  stiffness: 350,
   mass: 0.8
 };
 

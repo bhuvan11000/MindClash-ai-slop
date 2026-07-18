@@ -1,14 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-bg: #FFFFFF;
+  --color-bg-off: #F7F5EF;
+  --color-ink: #1c1c1a;
+  --color-ink-muted: #6a6a60;
+  --color-primary: #FF3B30;
+  --color-secondary: #2B4EFF;
+  --color-yellow: #FFD400;
+  --color-success: #00C853;
+
+  --shadow-sm: 3px 3px 0 var(--color-ink);
+  --shadow-md: 5px 5px 0 var(--color-ink);
+  --shadow-lg: 8px 8px 0 var(--color-ink);
+}
+
 @layer base {
   html {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: #08080c;
-    color: #f0f0f2;
+    font-family: 'Fredoka', sans-serif;
+    background: #ffffff;
+    color: #1c1c1a;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -23,7 +38,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.08);
   border-radius: 3px;
 }
 
@@ -49,20 +64,6 @@
 
 .animate-bounce-dot {
   animation: bounce-dot 1.2s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.animate-shimmer {
-  background: linear-gradient(135deg, #f0f0f2 0%, #a0a0c0 50%, #f0f0f2 100%);
-  background-size: 200% 200%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  animation: shimmer 6s ease-in-out infinite;
 }
 
 @keyframes message-in {

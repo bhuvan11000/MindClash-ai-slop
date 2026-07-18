@@ -7,15 +7,15 @@ function MessageBubble({ message, character, isNew, showAvatar = true }) {
     >
       {showAvatar ? (
         isUser ? (
-          <div className="w-7 h-7 rounded-lg bg-white/[0.08] border border-white/[0.06] flex items-center justify-center flex-shrink-0">
-            <span className="text-white text-[11px] font-semibold">U</span>
+          <div className="w-7 h-7 flex items-center justify-center flex-shrink-0 border-[2px] border-[--color-ink] bg-white">
+            <span className="font-mono text-[9px] text-[--color-ink] font-semibold">U</span>
           </div>
         ) : (
           <div
-            className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+            className="w-7 h-7 flex items-center justify-center flex-shrink-0 border-[2px] border-[--color-ink]"
             style={{ background: character.theme.cardColor }}
           >
-            <span className="text-white text-[11px] font-bold">{character.avatarInitials}</span>
+            <span className="text-white font-mono text-[9px] font-bold">{character.avatarInitials}</span>
           </div>
         )
       ) : (
@@ -23,24 +23,25 @@ function MessageBubble({ message, character, isNew, showAvatar = true }) {
       )}
       <div className="flex flex-col">
         <div
-          className={`px-5 py-3.5 text-sm text-[#f0f0f2] leading-relaxed ${
+          className={`px-5 py-3.5 text-sm text-[--color-ink] leading-relaxed ${
             isUser
-              ? 'bg-[#1a1a22] border border-white/[0.06] rounded-[16px_2px_16px_16px] shadow-md shadow-black/20'
-              : 'rounded-[2px_16px_16px_16px] shadow-lg shadow-black/30'
+              ? 'bg-white border-[3px] border-[--color-ink] shadow-[--shadow-sm]'
+              : ''
           }`}
           style={
-            !isUser
-              ? {
-                  background: `linear-gradient(135deg, ${character.theme.accentColor}0a 0%, ${character.theme.accentColor}03 100%)`,
-                  border: `1px solid ${character.theme.accentColor}15`,
-                  borderLeft: `2px solid ${character.theme.accentColor}40`,
+            isUser
+              ? { borderRadius: '2px 2px 18px 2px' }
+              : {
+                  borderRadius: '2px 2px 2px 18px',
+                  background: `color-mix(in srgb, ${character.theme.accentColor} 6%, #ffffff)`,
+                  border: `3px solid ${character.theme.accentColor}`,
+                  boxShadow: `3px 3px 0 ${character.theme.shadowColor}`,
                 }
-              : undefined
           }
         >
           {message.content}
         </div>
-        <p className="text-[10px] text-[#404050] mt-1">just now</p>
+        <p className="font-mono text-[9px] uppercase tracking-wider text-[--color-ink-muted] mt-1">just now</p>
       </div>
     </div>
   )
