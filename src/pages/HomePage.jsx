@@ -24,11 +24,11 @@ function HomePage() {
         </div>
       </div>
 
-      <section className="relative z-20 pt-10 pb-6 text-center">
+      <section className="relative z-20 pt-10 pb-16 text-center">
         <Shuffle
           text="MindClash"
           tag="h1"
-          className="font-pixel text-6xl text-[--color-ink] leading-relaxed"
+          className="font-pixel text-7xl text-[--color-ink] leading-relaxed"
           shuffleDirection="right"
           duration={0.35}
           animationMode="evenodd"
