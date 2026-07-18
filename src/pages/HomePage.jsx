@@ -14,12 +14,10 @@ function HomePage() {
               <img src="/avatars/luffy.webp" alt="MindClash" className="w-8 h-8" />
               <span className="font-pixel text-base text-[--color-ink] tracking-wide">MindClash</span>
             </Link>
-            <Link
-              to="/chat"
-              className="bg-[--color-ink] text-white px-5 py-1.5 text-sm font-semibold border-[3px] border-[--color-ink] shadow-[--shadow-sm] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[--shadow-md] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all duration-100"
-            >
-              Start Chatting
-            </Link>
+            <nav className="flex items-center gap-5">
+              <Link to="/chat" className="font-mono text-[11px] uppercase tracking-wider text-[--color-ink-muted] hover:text-[--color-ink] transition-colors duration-100">Chat</Link>
+              <Link to="/debate" className="font-mono text-[11px] uppercase tracking-wider text-[--color-ink-muted] hover:text-[--color-ink] transition-colors duration-100">Debate</Link>
+            </nav>
           </div>
         </div>
       </div>
