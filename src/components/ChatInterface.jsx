@@ -147,7 +147,7 @@ function ChatInterface({ character }) {
       <div className="flex-shrink-0 bg-white border-b-[3px] border-[--color-ink]">
         <div className="flex items-center px-6 py-4 gap-4">
           <div className="w-14 h-14 flex-shrink-0 border-[3px] border-[--color-ink] shadow-[--shadow-sm] overflow-hidden"
-            style={{ boxShadow: `3px 3px 0 var(--color-ink)` }}
+            style={{ background: character.theme.cardColor, boxShadow: `3px 3px 0 var(--color-ink)` }}
           >
             <img src={`/avatars/${character.id}.webp`} alt={character.name} className="w-full h-full object-cover" />
           </div>
@@ -180,7 +180,7 @@ function ChatInterface({ character }) {
         {currentMessages.length === 0 && !error ? (
           <div className="flex-1 flex flex-col items-center justify-center">
             <div className="w-20 h-20 border-[3px] border-[--color-ink] shadow-[--shadow-sm] overflow-hidden"
-              style={{ boxShadow: `5px 5px 0 var(--color-ink)` }}
+              style={{ background: character.theme.cardColor, boxShadow: `5px 5px 0 var(--color-ink)` }}
             >
               <img src={`/avatars/${character.id}.webp`} alt={character.name} className="w-full h-full object-cover" />
             </div>
@@ -226,7 +226,7 @@ function ChatInterface({ character }) {
             )}
             {isLoading && (
               <div className="self-start inline-flex bg-white border-[3px] border-[--color-ink] shadow-[--shadow-sm] px-4 py-2 items-center gap-2.5 mt-2">
-                <div className="w-7 h-7 flex-shrink-0 border-[2px] border-[--color-ink] overflow-hidden">
+                <div className="w-7 h-7 flex-shrink-0 border-[2px] border-[--color-ink] overflow-hidden" style={{ background: character.theme.cardColor }}>
                   <img src={`/avatars/${character.id}.webp`} alt={character.name} className="w-full h-full object-cover" />
                 </div>
                 <p className="font-mono text-[10px] uppercase tracking-wider text-[--color-ink-muted]">
