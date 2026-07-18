@@ -6,18 +6,20 @@ import characters from '../data/characters.json'
 function HomePage() {
   return (
     <div className="relative min-h-screen bg-white">
-      <div className="bg-white border-b-[3px] border-[--color-ink] h-16 flex items-center px-5">
-        <div className="w-full mx-auto flex items-center justify-between max-w-[1200px]">
-          <Link to="/" className="flex items-center gap-3">
-            <img src="/avatars/luffy.webp" alt="MindClash" className="w-8 h-8" />
-            <span className="font-heading text-xl text-[--color-ink]">MindClash</span>
-          </Link>
-          <Link
-            to="/chat"
-            className="bg-[--color-ink] text-white px-5 py-1.5 text-sm font-semibold border-[3px] border-[--color-ink] shadow-[--shadow-sm] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[--shadow-md] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all duration-100"
-          >
-            Start Chatting
-          </Link>
+      <div className="sticky top-3 z-30 px-5">
+        <div className="max-w-[1200px] mx-auto bg-white border-[3px] border-[--color-ink] shadow-[--shadow-md] h-16 flex items-center px-5">
+          <div className="w-full flex items-center justify-between">
+            <Link to="/" className="flex items-center gap-3">
+              <img src="/avatars/luffy.webp" alt="MindClash" className="w-8 h-8" />
+              <span className="font-heading text-xl text-[--color-ink]">MindClash</span>
+            </Link>
+            <Link
+              to="/chat"
+              className="bg-[--color-ink] text-white px-5 py-1.5 text-sm font-semibold border-[3px] border-[--color-ink] shadow-[--shadow-sm] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[--shadow-md] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all duration-100"
+            >
+              Start Chatting
+            </Link>
+          </div>
         </div>
       </div>
 
