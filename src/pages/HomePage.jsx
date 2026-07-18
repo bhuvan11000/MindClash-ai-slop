@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import CharacterCard from '../components/CharacterCard'
 import PixelSnow from '../components/PixelSnow'
+import Shuffle from '../components/Shuffle'
 import characters from '../data/characters.json'
 
 function HomePage() {
@@ -24,9 +25,22 @@ function HomePage() {
       </div>
 
       <section className="relative z-20 pt-10 pb-6 text-center">
-        <h1 className="font-heading text-8xl text-[--color-ink] leading-none" style={{ textShadow: '2px 2px 0 var(--color-ink)' }}>
-          MindClash
-        </h1>
+        <Shuffle
+          text="MindClash"
+          tag="h1"
+          className="font-heading text-8xl text-[--color-ink] leading-none"
+          style={{ textShadow: '2px 2px 0 var(--color-ink)' }}
+          shuffleDirection="right"
+          duration={0.35}
+          animationMode="evenodd"
+          shuffleTimes={2}
+          ease="power3.out"
+          stagger={0.03}
+          threshold={0}
+          triggerOnce={true}
+          triggerOnHover={true}
+          respectReducedMotion={true}
+        />
       </section>
 
       <div className="fixed inset-0 z-0 pointer-events-none">
