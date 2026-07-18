@@ -29,7 +29,6 @@ function HomePage() {
           text="MindClash"
           tag="h1"
           className="font-pixel text-4xl text-[--color-ink] leading-relaxed"
-          style={{ textShadow: '2px 2px 0 var(--color-ink)' }}
           shuffleDirection="right"
           duration={0.35}
           animationMode="evenodd"
