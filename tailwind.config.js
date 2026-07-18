@@ -8,7 +8,7 @@ export default {
     extend: {
       fontFamily: {
         heading: ['Bangers', 'sans-serif'],
-        pixel: ['Silkscreen', 'monospace'],
+        pixel: ['"Press Start 2P"', 'monospace'],
         body: ['Fredoka', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'monospace'],
       },
